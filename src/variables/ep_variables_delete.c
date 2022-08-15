@@ -11,7 +11,6 @@ epVariables__delete (
 ) {
 
   free(epVariables__get_real(vars, "pi"));
-  free(epVariables__get_real(vars, "e"));
 
   free(vars->vars);
   free(vars);
