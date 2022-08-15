@@ -21,7 +21,7 @@ The theory behind this parser relies on the application of the [Shunting yard al
 
 Go to the root directory, open a terminal and compile the source with:
 
-```bash
+```
 $ make
 ```
 
@@ -71,13 +71,13 @@ This library provides an expression structure to operate on. The following funct
 
 To compile your project with ExParser, simply link the static library alongside with the math library.
 
-```bash
+```
 $ gcc … -L<path-to-directory-containing-libexparser.a> -lexparser -lm
 ```
 
 or
 
-```bash
+```
 $ gcc … <path-to>/libexparser.a -lm
 ```
 
