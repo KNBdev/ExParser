@@ -85,7 +85,7 @@ $ gcc … <path-to>/libexparser.a -lm
 
 The following example contains all above mentioned functions.
 
-```
+```c
 #include <complex.h>
 #include <stdio.h>
 
