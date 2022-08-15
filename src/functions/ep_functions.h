@@ -106,6 +106,9 @@ double ep_functions_neq (double complex a, double complex b);
 double ep_functions_mod (double a, double b);
 double ep_functions_mod_inv (double a, double b);
 
+double ep_functions_scientific (double a, double b);
+double ep_functions_scientific_inv (double a, double b);
+
 //-----------------------------------------------------------------------------
 
 typedef struct epFunctionListElement {
@@ -144,6 +147,10 @@ static const epFunctionListElement epFunctionList[] = {
   {"*-", ep_functions_cmul_inv, CC, TWO, MULTIPLICATIVE},
   {"/-", ep_functions_cdiv_inv, CC, TWO, MULTIPLICATIVE},
   {"^-", ep_functions_cpow_inv, CC, TWO, POWER},
+
+  {"e", ep_functions_scientific, RR, TWO, F},
+  {"e+", ep_functions_scientific, RR, TWO, F},
+  {"e-", ep_functions_scientific_inv, RR, TWO, F},
 
   {"abs", cabs, CR, ONE, F},
   {"exp", cexp, CC, ONE, F},
