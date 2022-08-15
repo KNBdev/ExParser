@@ -1,4 +1,4 @@
-# ExParser
+# ExParser - NOT TESTED YET
 
 A mathematical **ex**pression **parser** written in C, able to handle real and complex inputs alongside a variety of commonly used functions for both real and complex evaluation.
 
@@ -170,12 +170,14 @@ The parser handles a lot for you, but there are a few things that the parser is 
 
 - **Powers are evaluated from right to left.** <br/> While the evaluation order of every other function or operator follows their precedence level and a left-to-right handling, powers are evaluated as follows: `4^3^2 = 4^(3^2)`. Keep that in mind or use braces to achieve a left-to-right evaluation order for powers.
 
+- **Complex values get evaluated as such.** <br/> If an expression contains a complex value, an evaluation of such one would occur as follows: `5i = (5 * i)`, not as in `5i = 5 * i`. The difference stands out when operators with a higher precedence level act on these values: `(5 * i)^2 != 5 * i^2`.
+
 - **Unary inverts (a.k.a. minus signs).** <br/> Even though some unary invert occurances are syntactically incorrect, this library supports some, such as a leading minus sign or a multiplicative operator followed directly by a minus.
 
 - **Error codes** <br/> If you pass an argument for the error code, this number contains information that can be interpreted in the following manner:
   + Error = 0: <br/> No errors occured during compilation.
   + Error = Length of expression string: <br/> An error occured during the application of the Shunting yard algorithm, either in the analysis or in the synthesis part, mostly because all functions and operators were recognized but wrongly concatenated in the expression string.
-  + Error = Value between 0 and length of expression string: <br/> The expression string is not balanced, meaning that not every opening brace has a well-placed closing brace or a function is not recognized.
+  + Error = Value between 1 and length of expression string: <br/> The expression string is not balanced, meaning that not every opening brace has a well-placed closing brace or a function is not recognized.
 
 ## Extra: Short explenation of the project components
 
