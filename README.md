@@ -12,8 +12,12 @@ The theory behind this parser relies on the application of the [Shunting yard al
 - Dependent only on the C standard library
 - Evaluation without recompilation of the expression
 - Usage of both real and complex variables
-- Evaluation routine optimized for speed
+- Evaluation routine is optimized for speed
 - Compiling routine condenses constant parts of the expression
+- Powers with whole number exponents are optimized in evaluation
+- Further supports:
+  + Scientific notation: `1e10`, `2e-5`, …
+  + Unary invert: `-3 + …`, `(-5 + 9i)`, `4 *- 2`, `7 /- sin(8i)`, …
 
 ## Building
 
@@ -168,11 +172,17 @@ The parser handles a lot for you, but there are a few things that the parser is 
 
 - **Variables are assigned by reference.** <br/> A core feature of this library is the easy use of variables. During compilation, the address of a given variable is assigned, meaning that one can change the value of the used variable without the need of another compiling step.
 
+- **Variables can be overwritten.** <br/> If a variable name already exists in the container, the address gets overwritten.
+
 - **Powers are evaluated from right to left.** <br/> While the evaluation order of every other function or operator follows their precedence level and a left-to-right handling, powers are evaluated as follows: `4^3^2 = 4^(3^2)`. Keep that in mind or use braces to achieve a left-to-right evaluation order for powers.
 
 - **Complex values get evaluated as such.** <br/> If an expression contains a complex value, an evaluation of such one would occur as follows: `5i = (5 * i)`, not as in `5i = 5 * i`. The difference stands out when operators with a higher precedence level act on these values: `(5 * i)^2 != 5 * i^2`.
 
 - **Unary inverts (a.k.a. minus signs).** <br/> Even though some unary invert occurances are syntactically incorrect, this library supports some, such as a leading minus sign or a multiplicative operator followed directly by a minus.
+
+- **Scientific notation is supported.** <br/> Only for real values.
+
+- **Pi is supported as variable.** <br/> Nothing special per se, but worth to mention.
 
 - **Error codes** <br/> If you pass an argument for the error code, this number contains information that can be interpreted in the following manner:
   + Error = 0: <br/> No errors occured during compilation.
