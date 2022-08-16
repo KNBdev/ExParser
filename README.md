@@ -1,4 +1,4 @@
-# ExParser
+# ExParser - CURRENTLY MALFUNCTIONING
 
 A mathematical **ex**pression **parser** written in C, able to handle real and complex inputs alongside a variety of commonly used functions for both real and complex evaluation.
 
