@@ -4,7 +4,7 @@ A mathematical **ex**pression **parser** written in C, able to handle real and c
 
 This parser was created out of the need for one, heavily inspired by [CodePlea](https://github.com/codeplea/)'s amazing math expression parser [tinyexpr](https://github.com/codeplea/tinyexpr).
 
-The theory behind this parser relies on the application of the [Shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm). Based on this algorithm a recursive node tree is constructed and stored inside an expression structure which then can be evaluated.
+The theory behind this parser relies on the application of the [shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm). Based on this algorithm a recursive node tree is constructed and stored inside an expression structure which then can be evaluated.
 
 ## Features
 
@@ -189,7 +189,7 @@ The parser handles a lot for you, but there are a few things that the parser is 
 
 - **Error codes** <br/> If you pass an argument for the error code, this number contains information that can be interpreted in the following manner:
   + Error = 0: <br/> No errors occured during compilation.
-  + Error = Length of expression string: <br/> An error occured during the application of the Shunting yard algorithm, either in the analysis or in the synthesis part, mostly because all functions and operators were recognized but wrongly concatenated in the expression string.
+  + Error = Length of expression string: <br/> An error occured during the application of the shunting yard algorithm, either in the analysis or in the synthesis part, mostly because all functions and operators were recognized but wrongly concatenated in the expression string.
   + Error = Value between 1 and length of expression string: <br/> The expression string is not balanced, meaning that not every opening brace has a well-placed closing brace or a function is not recognized.
 
 ## Extra: Short explenation of the project components
@@ -208,11 +208,11 @@ Now follows a short description of the different project parts.
 
 - **Expression** <br/> This part contains the definitions behind the expression struct that gets evaluated by the library. The expression struct itself only contains the root node of the compiled math expression and serves as an abstraction layer to enable the user to only include one header file instead of multiple ones.
 
-- **Functions** <br/> This part contains the pure math functions and some additional information about the functions such as whether the function takes one or two arguments, the precedence level of evaluation necessary for the implementation of the Shunting yard algorithm and what type the input and the output are of. The header of this part can be extended, following the pattern all the other functions are listed.
+- **Functions** <br/> This part contains the pure math functions and some additional information about the functions such as whether the function takes one or two arguments, the precedence level of evaluation necessary for the implementation of the shunting yard algorithm and what type the input and the output are of. The header of this part can be extended, following the pattern all the other functions are listed.
 
 - **Node** <br/> This part contains everything about the nodes that the recursive node tree contains of, the core pieces of the evaluation process.
 
-- **Stack** <br/> This part contains the code for the stack that is needed during the application of the Shunting yard algorithm.
+- **Stack** <br/> This part contains the code for the stack that is needed during the application of the shunting yard algorithm.
 
 - **Value** <br/> This part contains the definitions for the value structure that is used to store real and complex values and references which are needed during evaluation.
 
