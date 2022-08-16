@@ -179,11 +179,22 @@ static const epFunctionListElement epFunctionList[] = {
   {"atanh", catanh, CC, ONE, F}
 };
 
-//-----------------
+//-----------------------------------------------------------------------------
 
-static const char* const epFunctionListElement_unary_invert = "-";
+int
+ep_functions__exists_at (
+  const char *name
+);
 
-//-----------------
+bool
+ep_functions__exists (
+  const char *name
+);
+
+bool
+ep_functions__is_unary_invert (
+  const char *name
+);
 
 bool
 ep_functions__has_right_to_left_precedence (

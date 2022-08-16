@@ -189,19 +189,22 @@ epExpression__compile (
         if (isVar) {
           break;
 
-        } else if (ep_analysis__is_in_functionlist(buf)) {
+        } else if (ep_functions__exists(buf)) {
 
           epStack__push_function_by_name(stack, buf);
 
-          if (strcmp(buf, epFunctionListElement_unary_invert) == 0) {
+          if (ep_functions__is_unary_invert(buf)) {
 
             epFunctionListElement const *inv = epStack__pop_head_function(
               stack
             );
 
             if (epStack__is_empty(stack)) {
+
               epStack__push_real(stack, 0);
+
             } else {
+
               if (epStack__is_head_brace_open(stack)) {
                 epStack__push_real(stack, 0);
               }
