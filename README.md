@@ -53,12 +53,6 @@ To use the library, simply include the ExParser header into your project.
 
 The library provides several functions, all declared in the header file. There are functions for the expression itself and for a variable container that is used during the expression compiling.
 
-To compile, don't forget to tell the compiler where to find this header file.
-
-```
-$ gcc … -I<path-to-directory-containing-exparser.h> …
-```
-
 ### Variables
 
 ExParser provides a simple method to assign real and complex variables to your expression by using a variable container. The functions regarding the variable container are shown below.
@@ -79,16 +73,19 @@ This library provides an expression structure to operate on. The following funct
 
 ### Compilation
 
-To compile your project with ExParser, simply link the static library alongside with the math library.
+To compile your project with ExParser, simply link the static library alongside with the math library. Don't forget to tell the compiler where to find everything.
 
 ```
-$ gcc … -L<path-to-directory-containing-libexparser.a> -lexparser -lm
+$ gcc … \
+  -I<path-to-directory-containing-exparser.h> \
+  -L<path-to-directory-containing-libexparser.a> \
+  -lexparser -lm …
 ```
 
 or
 
 ```
-$ gcc … <path-to>/libexparser.a -lm
+$ gcc … -I<path-to-directory-containing-exparser.h> <path-to>/libexparser.a -lm
 ```
 
 ## Complete example
