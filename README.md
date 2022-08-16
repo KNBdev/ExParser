@@ -163,7 +163,7 @@ Real expression evaluates to: 0.158561
 Complex expression evaluates to: -0.002338 + 0.019904 * i
 ```
 
-## Additions
+## Advices
 
 The parser handles a lot for you, but there are a few things that the parser is not concepted for. Here are some things to remember while using this parser.
 
