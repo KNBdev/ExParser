@@ -53,6 +53,12 @@ To use the library, simply include the ExParser header into your project.
 
 The library provides several functions, all declared in the header file. There are functions for the expression itself and for a variable container that is used during the expression compiling.
 
+To compile, don't forget to tell the compiler where to find this header file.
+
+```
+$ gcc … -I<path-to-directory-containing-exparser.h> …
+```
+
 ### Variables
 
 ExParser provides a simple method to assign real and complex variables to your expression by using a variable container. The functions regarding the variable container are shown below.
