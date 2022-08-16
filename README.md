@@ -85,7 +85,7 @@ $ gcc … \
 or
 
 ```
-$ gcc … -I<path-to-directory-containing-exparser.h> <path-to>/libexparser.a -lm
+$ gcc … -I<path-to-directory-containing-exparser.h> <path-to>/libexparser.a -lm …
 ```
 
 ## Complete example
