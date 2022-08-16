@@ -183,7 +183,7 @@ The parser handles a lot for you, but there are a few things that the parser is 
 
 - **Unary inverts (a.k.a. minus signs).** <br/> Even though some unary invert occurances are syntactically incorrect, this library supports some, such as a leading minus sign or a multiplicative operator followed directly by a minus.
 
-- **Scientific notation is supported.** <br/> Only for real values.
+- **Scientific notation is supported.** <br/> Only for real values and only with a leading and upcoming real value like `1e+5`, `-3e4`, `7e-5` but not `e+2`, `ie-7` nor `3e`.
 
 - **Pi is supported as variable.** <br/> Nothing special per se, but worth to mention.
 
