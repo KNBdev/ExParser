@@ -1,6 +1,8 @@
 #include "ep_value.h"
 #include "ep_value_def.h"
 
+#include <stdio.h>
+
 //-----------------------------------------------------------------------------
 
 void

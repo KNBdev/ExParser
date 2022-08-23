@@ -11,44 +11,33 @@ epNode__reduce (
   epNode* node
 ) {
 
-  // Check for empty node slot.
   if (!node) {
     return true;
-  }
 
-  // Get value.
-  epValue* value = node->value;
+  } else if (epNode__contains_value(node)) {
 
-  // Node contains value.
-  if (epNode__contains_value(node)) {
+    epValue *value = node->value;
+    return (epValue__is_real(value) || epValue__is_complex(value));
 
-    return (!epValue__is_real_ref(value) && !epValue__is_complex_ref(value));
-
-  // Node contains function.
   } else if (epNode__contains_function(node)) {
 
-    // Reduce sub-nodes.
-    bool reduceLeft = epNode__reduce(node->left);
-    bool reduceRight = epNode__reduce(node->right);
+    bool isLeftConstant = epNode__reduce(node->left);
+    bool isRightConstant = epNode__reduce(node->right);
 
-    // Combine bools from sub-nodes.
-    bool isReducable = reduceLeft && reduceRight;
+    if (isLeftConstant && isRightConstant) {
 
-    // Both sub-nodes are constant.
-    if (isReducable) {
+      epNode__eval(node);
 
-      // Set value directly.
-      epValue__copy(value, epNode__eval(node));
-      node->type = VALUE;
-
-      // Remove sub nodes.
       epNode__delete(node->left);
       epNode__delete(node->right);
+
       epNode__reset_children(node);
+
+      return true;
+
+    } else {
+
+      return false;
     }
-
-    return isReducable;
   }
-
-  return false;
 }

@@ -100,8 +100,12 @@ double ep_functions_lt (double a, double b);
 double ep_functions_gt (double a, double b);
 double ep_functions_leq (double a, double b);
 double ep_functions_geq (double a, double b);
+
 double ep_functions_eq (double complex a, double complex b);
 double ep_functions_neq (double complex a, double complex b);
+
+double ep_functions_and (double complex a, double complex b);
+double ep_functions_or (double complex a, double complex b);
 
 double ep_functions_mod (double a, double b);
 double ep_functions_mod_inv (double a, double b);
@@ -131,9 +135,13 @@ static const epFunctionListElement epFunctionList[] = {
   {"=<", ep_functions_leq, RR, TWO, Q},
   {">=", ep_functions_geq, RR, TWO, Q},
   {"=>", ep_functions_geq, RR, TWO, Q},
+
   {"==", ep_functions_eq, CR, TWO, EQ},
   {"!=", ep_functions_neq, CR, TWO, EQ},
   {"=!", ep_functions_neq, CR, TWO, EQ},
+
+  {"&", ep_functions_and, CR, TWO, MULTIPLICATIVE},
+  {"|", ep_functions_or, CR, TWO, ADDITIVE},
 
   {"%", ep_functions_mod, RR, TWO, MULTIPLICATIVE},
   {"%-", ep_functions_mod_inv, RR, TWO, MULTIPLICATIVE},

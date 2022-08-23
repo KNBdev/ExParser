@@ -44,6 +44,17 @@ epVariables__get_complex (
   const char *name
 );
 
+unsigned int
+epVariables__get_amount (
+  epVariables *vars
+);
+
+const char*
+epVariables__get_name_by_index (
+  epVariables *vars,
+  unsigned int index
+);
+
 //-----------------------------------------------------------------------------
 
 #ifdef __cplusplus

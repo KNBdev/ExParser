@@ -48,7 +48,7 @@ epVariables__delete (
 epExpression*
 epExpression__compile (
   const char *expr,
-  unsigned int *error,
+  int *error,
   epVariables *vars
 );
 

@@ -5,10 +5,10 @@
 //-----------------------------------------------------------------------------
 
 double
-ep_functions_neq (
+ep_functions_and (
   double complex a,
   double complex b
 ) {
 
-  return (a != b);
+  return (a && b);
 }

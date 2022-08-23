@@ -1,4 +1,4 @@
-# ExParser - CURRENTLY MALFUNCTIONING
+# ExParser
 
 A mathematical **ex**pression **parser** written in C, able to handle real and complex inputs alongside a variety of commonly used functions for both real and complex evaluation.
 
@@ -173,24 +173,24 @@ The parser handles a lot for you, but there are a few things that the parser is 
 
 - **You don't necessarily need to use the error code functionality or a variables container.** <br/> These two features are meant to ease things, but there is no immediate need to use them. While evaluating constant expressions, i. e. expressions without variables, one could simply pass NULL for the variables container parameter in the `epExpression__compile` function. The same goes for the error code. If one is not interested in where a potential error occured, just pass NULL.
 
+- **Functions get checked before variables.** <br/> One cannot overwrite a function with a variable name.
+
 - **Variables are assigned by reference.** <br/> A core feature of this library is the easy use of variables. During compilation, the address of a given variable is assigned, meaning that one can change the value of the used variable without the need of another compiling step.
 
 - **Variables can be overwritten.** <br/> If a variable name already exists in the container, the address gets overwritten.
 
 - **Powers are evaluated from right to left.** <br/> While the evaluation order of every other function or operator follows their precedence level and a left-to-right handling, powers are evaluated as follows: `4^3^2 = 4^(3^2)`. Keep that in mind or use braces to achieve a left-to-right evaluation order for powers.
 
-- **Complex values get evaluated as such.** <br/> If an expression contains a complex value, an evaluation of such one would occur as follows: `5i = (5 * i)`, not as in `5i = 5 * i`. The difference stands out when operators with a higher precedence level act on these values: `(5 * i)^2 != 5 * i^2`.
+- **Imaginary values get evaluated as such.** <br/> If an expression contains an imaginary value, an evaluation of such one would occur as follows: `5i = (5 * i)`, not as in `5i = 5 * i`. The difference stands out when operators with a higher precedence level act on these values: `(5 * i)^2 != 5 * i^2`. But pay attention! This only occurs on values directly followed by the imaginary unit, so: `3+4i^2 == 3 + (4i)^2` and `3+4i^2 != (3+4i)^2`.
 
 - **Unary inverts (a.k.a. minus signs).** <br/> Even though some unary invert occurances are syntactically incorrect, this library supports some, such as a leading minus sign or a multiplicative operator followed directly by a minus.
 
 - **Scientific notation is supported.** <br/> Only for real values and only with a leading and upcoming real value like `1e+5`, `-3e4`, `7e-5` but not `e+2`, `ie-7` nor `3e`.
 
-- **Pi is supported as variable.** <br/> Nothing special per se, but worth to mention.
-
 - **Error codes** <br/> If you pass an argument for the error code, this number contains information that can be interpreted in the following manner:
   + Error = 0: <br/> No errors occured during compilation.
-  + Error = Length of expression string: <br/> An error occured during the application of the shunting yard algorithm, either in the analysis or in the synthesis part, mostly because all functions and operators were recognized but wrongly concatenated in the expression string.
-  + Error = Value between 1 and length of expression string: <br/> The expression string is not balanced, meaning that not every opening brace has a well-placed closing brace or a function is not recognized.
+  + Error = Value between 1 and length of expression string: <br/> A function or a variable is not recognized or the expression string is not balanced, meaning that not every opening brace has a well-placed closing brace.
+  + Error = -1: <br/> An error occured during the synthesis of the reverse polish notation.
 
 ## Extra: Short explenation of the project components
 

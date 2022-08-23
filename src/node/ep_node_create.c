@@ -15,6 +15,7 @@ epNode__create (
 
   node->left = NULL;
   node->right = NULL;
+  node->type = VALUE;
   node->value = epValue__create();
 
   return node;

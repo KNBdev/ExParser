@@ -1,15 +1,14 @@
-#include <stdlib.h>
+#include "exparser.h"
 
 #include "ep_variables.h"
 #include "ep_variables_def.h"
 
 //-----------------------------------------------------------------------------
 
-void
-epVariables__delete (
+unsigned int
+epVariables__get_amount (
   epVariables *vars
 ) {
 
-  free(vars->vars);
-  free(vars);
+  return vars->amount;
 }

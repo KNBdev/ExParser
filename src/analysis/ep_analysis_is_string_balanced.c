@@ -10,7 +10,7 @@
 bool
 ep_analysis__is_string_balanced (
   const char *string,
-  unsigned int *error
+  int *error
 ) {
 
   if (*error != 0) {

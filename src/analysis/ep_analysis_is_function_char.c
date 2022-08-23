@@ -12,14 +12,12 @@ ep_analysis__is_function_char (
 ) {
 
   unsigned int size = sizeof(epFunctionList) / sizeof(epFunctionListElement);
-  unsigned int len;
-  unsigned int i, j;
 
-  for (i = 0; i < size; i++) {
+  for (unsigned int i = 0; i < size; i++) {
 
-    len = strlen(epFunctionList[i].name);
+    unsigned int len = strlen(epFunctionList[i].name);
 
-    for (j = 0; j < len; j++) {
+    for (unsigned int j = 0; j < len; j++) {
 
       if (epFunctionList[i].name[j] == c) {
         return true;

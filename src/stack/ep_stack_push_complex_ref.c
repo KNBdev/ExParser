@@ -13,8 +13,7 @@ epStack__push_complex_ref (
 ) {
 
   epStack__push(stack);
-  epStack__init_value(stack);
+  epValue__set_complex_ref(stack->head->value, cRef);
 
   stack->head->type = VALUE;
-  epValue__set_complex_ref(stack->head->content.value, cRef);
 }

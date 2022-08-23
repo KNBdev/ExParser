@@ -10,16 +10,20 @@ extern "C" {
 #include <complex.h>
 #include <stdbool.h>
 
+#include "ep_variables.h"
+
 //-----------------------------------------------------------------------------
 
 bool ep_analysis__is_numeric (char);
 bool ep_analysis__is_imag_unit (char);
 bool ep_analysis__is_opening_brace (char);
 bool ep_analysis__is_closing_brace (char);
+
 bool ep_analysis__is_function_char (char);
+bool ep_analysis__is_variable_char (epVariables* var, char c);
 
 bool ep_analysis__is_brace_pair (char, char);
-bool ep_analysis__is_string_balanced (const char *string, unsigned int* error);
+bool ep_analysis__is_string_balanced (const char *string, int *error);
 
 char ep_analysis__get_complementary_brace (char);
 

@@ -23,10 +23,5 @@ epVariables__create (
   vars->vars = NULL;
   vars->amount = 0;
 
-  double *pi = (double *) malloc(sizeof(double));
-  *pi = M_PI;
-
-  epVariables__add_real(vars, "pi", pi);
-
   return vars;
 }

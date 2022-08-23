@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <complex.h>
 #include <math.h>
 #include <stdbool.h>
@@ -18,6 +17,18 @@ const struct {
   {"-i^sinh(1/c)/-r^2", 0.086703 + 0.020301 * I},
   {"1e-6*10^12", 1e+6},
   {"-i *- log(r/c)^9*i", 0.004464 - 0.041803 * I},
+  {"-i *- logJ(r/c)^9*i", 0.004464 - 0.041803 * I},
+  {"3 - 4", -1.},
+  {"3 + 4", 7.},
+  {"2 == 3", 0},
+  {"4+3i ", 4 + 3 * I},
+  {"4+1i ^ 3+0i", 4 - 1 * I},
+  {"3+4i != 0", 1},
+  {"3+4i == 0+2i", 0},
+  {"3+4i == 0", 0},
+  {"0 | 2 & (0 | 4i) | 2^0", 1},
+  {"2 & 0 | 4", 1},
+  {"3 & 12", 1},
 };
 
 //-----------------------------------------------------------------------------
@@ -30,16 +41,16 @@ printComplex (
   printf("%f + %f * i", creal(c), cimag(c));
 }
 
-//-----------------------------------------------------------------------------
+//-------------------------------------
 
-bool
-isEqual (
-  double complex a,
-  double complex b,
-  double margin
+void
+printBlanks (
+  unsigned int n
 ) {
 
-  return (cabs(a - b) < fabs(margin));
+  for (unsigned int i = 0; i < n; i++) {
+    printf(" ");
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -58,43 +69,43 @@ main (
   epVariables__add_complex(vars, "c", &_complex);
 
   unsigned int size = sizeof(testCases) / sizeof(testCases[0]);
-  unsigned int error;
+  int error;
 
-  double complex result;
-  double complex _result;
+  epExpression *expr;
 
-  double margin = 1e-5;
+  //---------------------------------------------------------------------------
 
   for (unsigned int i = 0; i < size; i++) {
 
-    _result = testCases[i].result;
+    char const *s = testCases[i].string;
 
-    printf("----------------\n");
-    printf("Current expression: %s\n", testCases[i].string);
-    printf("Expected result: ");
-    printComplex(_result);
-    printf("\n");
+    printf("---------------------------------------\n");
+    printf("%s\n", s);
 
-    epExpression *expr = epExpression__compile(
-      testCases[i].string,
-      &error,
-      vars
-    );
+    expr = epExpression__compile(testCases[i].string, &error, vars);
 
-    if (!expr) {
-      printf("Error occured during compilation!\n");
-      continue;
+    if (expr) {
+
+      double complex result = epExpression__eval_complex(expr);
+
+      printf("Calculated result: ");
+      printComplex(result);
+      printf("\n");
+
+      printf("Expected result  : ");
+      printComplex(testCases[i].result);
+      printf("\n\n");
+
+    } else {
+
+      printBlanks((error >= 0) ? error : 0);
+      printf("^\nError near here!\n");
     }
 
-    result = epExpression__eval_complex(expr);
     epExpression__delete(expr);
-
-    printf("Evaluated result: ");
-    printComplex(result);
-    printf("\n");
-
-    assert(isEqual(result, _result, margin));
   }
+
+  //---------------------------------------------------------------------------
 
   epVariables__delete(vars);
 

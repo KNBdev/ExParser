@@ -21,7 +21,7 @@ typedef struct epString {
 
   const char *chars;
   const unsigned int len;
-  unsigned int *pos;
+  int *pos;
 
 } epString;
 
@@ -29,31 +29,32 @@ typedef struct epString {
 
 static void nextChar (epString *s);
 static void prevChar (epString *s);
+static char currChar (epString *s);
+
+static epStack* string_to_stack (epString *s, epVariables *vars);
+static epStack* stack_to_rpn_stack (epStack *stack, int *error);
+static epNode* rpn_stack_to_node (epStack *rpn, int *error);
 
 //-----------------------------------------------------------------------------
 
 epExpression*
 epExpression__compile (
   const char *expression,
-  unsigned int *error,
+  int *error,
   epVariables *vars
 ) {
-
-  //---------------------------------------------------------------------------
-  // Check parameters.
 
   if (!expression) {
     return NULL;
   }
 
-  unsigned int _error;
+  int _error;
 
   if (!error) {
     error = &_error;
   }
 
-  //---------------------------------------------------------------------------
-  // Set up string struct,
+  *error = 0;
 
   epString ex = {
     expression,
@@ -61,68 +62,132 @@ epExpression__compile (
     error
   };
 
-  *(ex.pos) = 0;
-
-  //---------------------------------------------------------------------------
-  // Check for balanced expression.
-
   if (!ep_analysis__is_string_balanced(ex.chars, ex.pos)) {
     return NULL;
   }
 
-  //---------------------------------------------------------------------------
-  // Analyze the expression and convert it to a stack (Part I: Translation).
+  epStack *stack = string_to_stack(&ex, vars);
+
+  if (!stack) {
+    return NULL;
+  }
+
+  epStack *rpn = stack_to_rpn_stack(stack, error);
+
+  if (!rpn) {
+    return NULL;
+  }
+
+  epNode *node = rpn_stack_to_node(rpn, error);
+
+  if (!node) {
+    return NULL;
+  }
+
+  epExpression *expr = epExpression__create();
+  epExpression__assign_node(expr, node);
+
+  return expr;
+}
+
+//-----------------------------------------------------------------------------
+
+static void
+nextChar (
+  epString *s
+) {
+
+  while (*s->pos < s->len) {
+    (*s->pos)++;
+    if (!isspace(currChar(s))) {
+      break;
+    }
+  }
+}
+
+//-------------------------------------
+
+static void
+prevChar (
+  epString *s
+) {
+
+  while (*s->pos > 0) {
+    (*s->pos)--;
+    if (!isspace(currChar(s))) {
+      break;
+    }
+  }
+}
+
+//-------------------------------------
+
+static char
+currChar (
+  epString *s
+) {
+
+  return s->chars[*s->pos];
+}
+
+//-----------------------------------------------------------------------------
+
+static epStack*
+string_to_stack (
+  epString *s,
+  epVariables *vars
+) {
 
   epStack *stack = epStack__create();
 
-  while (*ex.pos < ex.len) {
+  while (*s->pos < s->len) {
 
     //-------------------------------------------------------------------------
     // Numeric (real and imag).
-    if (ep_analysis__is_numeric(ex.chars[*ex.pos])) {
+    if (ep_analysis__is_numeric(currChar(s))) {
 
-      unsigned int size = 2;
-      char *numeric = (char *) malloc(sizeof(char) * size);
-      numeric[0] = ex.chars[*ex.pos];
+      unsigned int string_len = 2;
+      char *string = (char *) malloc(sizeof(char) * string_len);
+      string[0] = currChar(s);
 
       while (true) {
 
-        nextChar(&ex);
-        char c = ex.chars[*ex.pos];
+        nextChar(s);
+        char c = currChar(s);
 
         if (!ep_analysis__is_numeric(c)) {
-          prevChar(&ex);
+          prevChar(s);
           break;
         }
 
-        size++;
+        string_len++;
 
-        numeric = realloc(numeric, sizeof(char) * size);
-        numeric[size - 2] = c;
+        string = realloc(string, sizeof(char) * string_len);
+        string[string_len - 2] = c;
       }
 
-      numeric[size - 1] = 0;
-      double d = strtod(numeric, NULL);
-      free(numeric);
+      string[string_len - 1] = 0;
+      double d = atof(string);
+      free(string);
 
-      nextChar(&ex);
+      nextChar(s);
 
-      if (ep_analysis__is_imag_unit(ex.chars[*ex.pos])) {
+      if (ep_analysis__is_imag_unit(currChar(s))) {
 
         epStack__push_complex(stack, d * I);
 
       } else {
 
         epStack__push_real(stack, d);
-        prevChar(&ex);
+        prevChar(s);
       }
 
     //-------------------------------------------------------------------------
     // Imaginary unit.
     } else if (
-      ep_analysis__is_imag_unit(ex.chars[*ex.pos])
+      ep_analysis__is_imag_unit(currChar(s))
       &&
-      !isalpha(ex.chars[(*ex.pos) + 1])
+      !isalpha(s->chars[(*s->pos) + 1])
     ) {
 
       epStack__push_complex(stack, I);
@@ -130,70 +195,51 @@ epExpression__compile (
     //-------------------------------------------------------------------------
     // Function or variable.
     } else if (
-      isalpha(ex.chars[*ex.pos])
+      ep_analysis__is_function_char(currChar(s))
       ||
-      ep_analysis__is_function_char(ex.chars[*ex.pos])
+      ep_analysis__is_variable_char(vars, currChar(s))
     ) {
 
-      unsigned int size = 2;
-      char *literal = (char *) malloc(sizeof(char) * size);
-      literal[0] = ex.chars[*ex.pos];
+      unsigned int string_len = 2;
+      char *string = (char *) malloc(sizeof(char) * string_len);
+      string[0] = currChar(s);
 
       while (true) {
 
-        nextChar(&ex);
-        char c = ex.chars[*ex.pos];
+        nextChar(s);
+        char c = currChar(s);
 
-        if (!(isalpha(c) || ep_analysis__is_function_char(c))) {
-          prevChar(&ex);
+        if (
+          !(
+            ep_analysis__is_function_char(c)
+            ||
+            ep_analysis__is_variable_char(vars, c)
+          )
+        ) {
+          prevChar(s);
           break;
         }
 
-        size++;
-
-        literal = realloc(literal, sizeof(char) * size);
-        literal[size - 2] = c;
+        string_len++;
+        string = realloc(string, sizeof(char) * string_len);
+        string[string_len - 2] = c;
       }
 
-      literal[size - 1] = 0;
+      string[string_len - 1] = 0;
+      char *buffer = NULL;
+      unsigned int buffersize = string_len;
 
-      bool isVar = false;
-      char *buf = NULL;
+      while (buffersize > 1) {
 
-      while (size > 0) {
+        buffer = realloc(buffer, sizeof(char) * buffersize);
+        strncpy(buffer, string, buffersize);
+        buffer[buffersize - 1] = 0;
 
-        buf = realloc(buf, sizeof(char) * size);
-        strncpy(buf, literal, size);
-        buf[size - 1] = 0;
+        if (ep_functions__exists(buffer)) {
 
-        if (epVariables__exists(vars, buf)) {
+          epStack__push_function_by_name(stack, buffer);
 
-          if (epVariables__is_real(vars, buf)) {
-
-            epStack__push_real_ref(
-              stack,
-              epVariables__get_real(vars, buf)
-            );
-
-          } else if (epVariables__is_complex(vars, buf)) {
-
-            epStack__push_complex_ref(
-              stack,
-              epVariables__get_complex(vars, buf)
-            );
-          }
-
-          isVar = true;
-        }
-
-        if (isVar) {
-          break;
-
-        } else if (ep_functions__exists(buf)) {
-
-          epStack__push_function_by_name(stack, buf);
-
-          if (ep_functions__is_unary_invert(buf)) {
+          if (ep_functions__is_unary_invert(buffer)) {
 
             epFunctionListElement const *inv = epStack__pop_head_function(
               stack
@@ -215,59 +261,90 @@ epExpression__compile (
 
           break;
 
-        } else {
-          size--;
-          prevChar(&ex);
+        } else if (epVariables__exists(vars, buffer)) {
+
+          if (epVariables__is_real(vars, buffer)) {
+
+            epStack__push_real_ref(
+              stack,
+              epVariables__get_real(vars, buffer)
+            );
+
+          } else if (epVariables__is_complex(vars, buffer)) {
+
+            epStack__push_complex_ref(
+              stack,
+              epVariables__get_complex(vars, buffer)
+            );
+          }
+
+          break;
         }
+
+        buffersize--;
+        prevChar(s);
       }
 
-      free(buf);
-      free(literal);
+      free(string);
+      free(buffer);
 
-      if (size == 0) {
-        break;
+      if (buffersize == 1) {
+
+        epStack__delete(stack);
+        return NULL;
       }
 
     //-------------------------------------------------------------------------
     // Opening brace.
-    } else if (ep_analysis__is_opening_brace(ex.chars[*ex.pos])) {
+    } else if (ep_analysis__is_opening_brace(currChar(s))) {
 
-      epStack__push_brace_open(stack, ex.chars[*ex.pos]);
+      epStack__push_brace_open(stack, currChar(s));
 
     //-------------------------------------------------------------------------
     // Closing brace.
-    } else if (ep_analysis__is_closing_brace(ex.chars[*ex.pos])) {
+    } else if (ep_analysis__is_closing_brace(currChar(s))) {
 
-      epStack__push_brace_closed(stack, ex.chars[*ex.pos]);
+      epStack__push_brace_closed(stack, currChar(s));
+
+    //-------------------------------------------------------------------------
+    // No fit.
+    } else {
+
+      epStack__delete(stack);
+      return NULL;
     }
 
-    nextChar(&ex);
+    nextChar(s);
   }
 
-  //---------------------------------------------------------------------------
-  // Adjust error code if necessary.
+  *s->pos = (*s->pos == s->len) ? 0 : *s->pos;
 
-  *error = (*error == ex.len) ? 0 : *error;
-
-  if (*error != 0) {
+  if (*s->pos != 0) {
 
     epStack__delete(stack);
     return NULL;
   }
 
-  //---------------------------------------------------------------------------
-  // Apply shunting yard algorithm (Part II: Analysis).
-
   epStack__reverse(stack);
+  return stack;
+}
+
+//-----------------------------------------------------------------------------
+
+static epStack*
+stack_to_rpn_stack (
+  epStack *stack,
+  int *error
+) {
 
   epStack *temp = epStack__create();
-  epStack *output = epStack__create();
+  epStack *rpn = epStack__create();
 
   while (!epStack__is_empty(stack)) {
 
     if (epStack__is_head_value(stack)) {
 
-      epStack__push_value(output, epStack__pop_head_value(stack));
+      epStack__push_value(rpn, epStack__pop_head_value(stack));
 
     } else if (epStack__is_head_function(stack)) {
 
@@ -301,7 +378,7 @@ epExpression__compile (
 
             } else {
 
-              epStack__push_function_by_ref(output, ft);
+              epStack__push_function_by_ref(rpn, ft);
             }
 
           } else {
@@ -326,7 +403,7 @@ epExpression__compile (
         if (epStack__is_head_function(temp)) {
 
           epStack__push_function_by_ref(
-            output,
+            rpn,
             epStack__pop_head_function(temp)
           );
 
@@ -345,8 +422,9 @@ epExpression__compile (
             }
           }
 
+          epStack__delete(stack);
           epStack__delete(temp);
-          epStack__delete(output);
+          epStack__delete(rpn);
 
           return NULL;
         }
@@ -357,12 +435,13 @@ epExpression__compile (
   while (!epStack__is_empty(temp)) {
 
     if (epStack__is_head_function(temp)) {
-      epStack__push_function_by_ref(output, epStack__pop_head_function(temp));
+      epStack__push_function_by_ref(rpn, epStack__pop_head_function(temp));
 
     } else {
 
+      epStack__delete(stack);
       epStack__delete(temp);
-      epStack__delete(output);
+      epStack__delete(rpn);
 
       return NULL;
     }
@@ -371,34 +450,42 @@ epExpression__compile (
   epStack__delete(stack);
   epStack__delete(temp);
 
-  //---------------------------------------------------------------------------
-  // Assemble reverse polish notation (Part III: Synthesis).
+  epStack__reverse(rpn);
 
-  epStack__reverse(output);
+  return rpn;
+}
+
+//-----------------------------------------------------------------------------
+
+static epNode*
+rpn_stack_to_node (
+  epStack *rpn,
+  int *error
+) {
 
   epNode **nodeList = NULL;
   epNode *current = NULL;
   epValue *value = NULL;
 
-  unsigned int nodeCount = 0;
+  int nodeCount = 0;
 
-  while (!epStack__is_empty(output)) {
+  while (!epStack__is_empty(rpn)) {
 
-    if (epStack__is_head_value(output)) {
+    if (epStack__is_head_value(rpn)) {
 
       nodeCount++;
       nodeList = (epNode **) realloc(nodeList, sizeof(epNode*) * nodeCount);
 
       nodeList[nodeCount - 1] = epNode__create();
 
-      value = epStack__pop_head_value(output);
+      value = epStack__pop_head_value(rpn);
       epNode__copy_value(nodeList[nodeCount - 1], value);
       epValue__delete(value);
 
-    } else if (epStack__is_head_function(output)) {
+    } else if (epStack__is_head_function(rpn)) {
 
       epFunctionListElement const *function = epStack__pop_head_function(
-        output
+        rpn
       );
 
       current = epNode__create();
@@ -415,60 +502,40 @@ epExpression__compile (
 
         nodeCount--;
         nodeList = (epNode **) realloc(nodeList, sizeof(epNode*) * nodeCount);
+
+      } else {
+
+        epStack__delete(rpn);
+
+        for (unsigned int i = 0; i < nodeCount; i++) {
+          epNode__delete(nodeList[i]);
+        }
+
+        free(nodeList);
+        return NULL;
       }
 
       nodeList[nodeCount - 1] = current;
     }
   }
 
-  epStack__delete(output);
+  epStack__delete(rpn);
 
   if (nodeCount != 1) {
 
-    *error = ex.len;
+    for (unsigned int i = 0; i < nodeCount; i++) {
+      epNode__delete(nodeList[i]);
+    }
+
+    *error = -1;
     free(nodeList);
 
     return NULL;
   }
 
-  //---------------------------------------------------------------------------
-  // Assign node tree to expression.
-
-  epExpression *expr = epExpression__create();
-  epExpression__assign_node(expr, nodeList[0]);
-
-  epNode__reduce(nodeList[0]);
+  epNode *node = nodeList[0];
   free(nodeList);
 
-  return expr;
-}
-
-//-----------------------------------------------------------------------------
-
-static void
-nextChar (
-  epString *s
-) {
-
-  while (*s->pos < s->len) {
-    (*s->pos)++;
-    if (!isspace(s->chars[*s->pos])) {
-      break;
-    }
-  }
-}
-
-//-----------------------------------------------------------------------------
-
-static void
-prevChar (
-  epString *s
-) {
-
-  while (*s->pos > 0) {
-    (*s->pos)--;
-    if (!isspace(s->chars[*s->pos])) {
-      break;
-    }
-  }
+  epNode__reduce(node);
+  return node;
 }

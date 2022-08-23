@@ -11,9 +11,5 @@ epVariables__exists (
   const char *name
 ) {
 
-  if (!vars) {
-    return false;
-  }
-
   return (epVariables__exists_at(vars, name) != -1);
 }
