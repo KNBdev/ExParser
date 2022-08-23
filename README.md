@@ -190,7 +190,7 @@ The parser handles a lot for you, but there are a few things that the parser is 
 - **Error codes** <br/> If you pass an argument for the error code, this number contains information that can be interpreted in the following manner:
   + Error = 0: <br/> No errors occured during compilation.
   + Error = Value between 1 and length of expression string: <br/> A function or a variable is not recognized or the expression string is not balanced, meaning that not every opening brace has a well-placed closing brace.
-  + Error = -1: <br/> An error occured during the synthesis of the reverse polish notation.
+  + Error = -1: <br/> An error occured during the synthesis of the reverse polish notation or the expression string started with a closing brace.
 
 ## Extra: Short explenation of the project components
 
