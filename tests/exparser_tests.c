@@ -18,6 +18,9 @@ const struct {
   {"1e-6*10^12", 1e+6},
   {"-i *- log(r/c)^9*i", 0.004464 - 0.041803 * I},
   {"-i *- logJ(r/c)^9*i", 0.004464 - 0.041803 * I},
+  {"]c", 6 + 2.25 * I},
+  {"c", 6 + 2.25 * I},
+  {"2", 2},
   {"3 - 4", -1.},
   {"3 + 4", 7.},
   {"2 == 3", 0},
@@ -99,7 +102,7 @@ main (
     } else {
 
       printBlanks((error >= 0) ? error : 0);
-      printf("^\nError near here!\n");
+      printf("^\nError near here, error code: %d\n", error);
     }
 
     epExpression__delete(expr);

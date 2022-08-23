@@ -161,7 +161,6 @@ string_to_stack (
         }
 
         string_len++;
-
         string = realloc(string, sizeof(char) * string_len);
         string[string_len - 2] = c;
       }

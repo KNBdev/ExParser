@@ -24,7 +24,7 @@ ep_analysis__is_string_balanced (
 
   for (int i = 0; i < size; i++) {
 
-    *error = (i < 2) ? 1 : i;
+    *error = i;
 
     c = string[i];
 
@@ -37,6 +37,7 @@ ep_analysis__is_string_balanced (
     } else if (ep_analysis__is_closing_brace(c)) {
 
       if (buffersize == 0) {
+        *error = (i == 0) ? -1 : *error;
         free(braces);
         return false;
       }
