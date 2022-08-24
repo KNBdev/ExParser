@@ -11,14 +11,7 @@ BUILD_DIR ?= ./build
 
 SRC_INCL ?= ./include
 
-SRC_DIRS ?= \
-  ./src/analysis \
-  ./src/expression \
-  ./src/functions \
-  ./src/node \
-  ./src/stack \
-  ./src/value \
-  ./src/variables
+SRC_DIRS ?= ./src
 
 LDFLAGS += -lm
 ARFLAGS = rcs
