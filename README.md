@@ -2,7 +2,7 @@
 
 A mathematical **ex**pression **parser** written in C, able to handle real and complex inputs alongside a variety of commonly used functions for both real and complex evaluation.
 
-This parser was created out of the need for one, heavily inspired by [CodePlea](https://github.com/codeplea/)'s amazing math expression parser [tinyexpr](https://github.com/codeplea/tinyexpr).
+This parser was created out of the need for one, heavily inspired by [CodePlea](https://codeplea.com/)'s amazing math expression parser [tinyexpr](https://github.com/codeplea/tinyexpr).
 
 The theory behind this parser relies on the application of the [shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm). Based on this algorithm a recursive node tree is constructed and stored inside an expression structure which then can be evaluated.
 
