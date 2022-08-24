@@ -84,6 +84,25 @@ epNode__copy_value (
   epValue *value
 );
 
+epNode*
+epNode__copy_node_recursively (
+  epNode *node
+);
+
+void
+epNode__replace_recursively_real_ref (
+  epNode *node,
+  double *r_old,
+  double *r_new
+);
+
+void
+epNode__replace_recursively_complex_ref (
+  epNode *node,
+  double complex *c_old,
+  double complex *c_new
+);
+
 bool
 epNode__reduce (
   epNode* node

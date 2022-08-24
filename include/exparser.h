@@ -52,6 +52,25 @@ epExpression__compile (
   epVariables *vars
 );
 
+epExpression*
+epExpression__duplicate (
+  epExpression *expr
+);
+
+void
+epExpression__replace_real_variable (
+  epExpression *expr,
+  double *r_old,
+  double *r_new
+);
+
+void
+epExpression__replace_complex_variable (
+  epExpression *expr,
+  double complex *c_old,
+  double complex *c_new
+);
+
 double
 epExpression__eval_real (
   epExpression *expr

@@ -18,6 +18,7 @@ The theory behind this parser relies on the application of the [shunting yard al
 - Further supports:
   + Scientific notation: `1e10`, `2e-5`, …
   + Unary invert: `-3 + …`, `(-5 + 9i)`, `4 *- 2`, `7 /- sin(8i)`, …
+- Thread safety can be achieved, read [Thread safety](#Thread-safety)
 
 ## Building
 
@@ -67,6 +68,9 @@ ExParser provides a simple method to assign real and complex variables to your e
 This library provides an expression structure to operate on. The following functions are declared in the header:
 
 - `epExpression* epExpression__compile (const char *expr, unsigned int *error, epVariables *vars);` <br/> Compile an expression string into an expression struct.
+- `epExpression* epExpression__duplicate (epExpression *expr);` <br/> Duplicate an existing compiled expression into a standalone copy that has its own reserved memory.
+- `void epExpression__replace_real_variable (epExpression *expr, double *r_old, double *r_new);` <br/> Replace a real variable in an already compiled expression.
+- `void epExpression__replace_complex_variable (epExpression *expr, double complex *c_old, double complex *c_new);` <br/> Replace a complex variable in an already compiled expression.
 - `double epExpression__eval_real (epExpression *expr);` <br/> Evaluate an expression struct to a real value.
 - `double complex epExpression__eval_complex (epExpression *expr);` <br/> Evaluate an expression struct to a complex value.
 - `void epExpression__delete (epExpression *expr);` <br/> Delete an expression struct.
@@ -163,11 +167,79 @@ Real expression evaluates to: 0.158561
 Complex expression evaluates to: -0.002338 + 0.019904 * i
 ```
 
+## Thread safety
+
+This library strives to provide an expression parsing engine that can be used for heavy computation applications. A common way to achieve that is through multithreading. Bad news is that the intrinsic design of the library components stands in the way of parallel computation. Here is a short explenation why.
+
+The weak spot lays in the assignment of the variables by-reference. That ensures an evaluation without the persistent need to pass all used variables every function call and the need for a recompilation. This design has been planned from the beginning and it brings more good than bad with it. But when parallel computation or evaluation occurs, there is often the need to give these variables new values. The problem occurs when a new value is applied, every epExpression that holds a reference to that variable uses the new value from now on, resulting in undefined behaviour. In an ideal case, the old evaluation already de-referenced the variable before the new value has been set. The worst case is a not finished old evaluation with an occuring new value, leading to false results.
+
+How to fix this?
+
+The easiest method is to assign a new variable for a new copy of an epExpression, but therefore, the old variables address must be known, which won't be a problem. One can then replace the variables address recursively in the node tree to ensure a separation between the evaluation of two separate expressions. Here is a short complete example:
+
+```c
+#include <stddef.h>
+#include <stdio.h>
+
+#include "exparser.h"
+
+//-----------------------------------------------------------------------------
+
+int main (void) {
+
+  // Expression to evaluate.
+  const char *expression = "x^2 - sin(x)";
+
+  // Real variables to use during evaluation.
+  double old = 4;
+  double new = 7;
+
+  // Variables container.
+  epVariables *vars = epVariables__create();
+  epVariables__add_real(vars, "x", &old);
+
+  // Compilation process.
+  epExpression *expr_original = epExpression__compile(expression, NULL, vars);
+
+  // Delete variables container after compilation.
+  epVariables__delete(vars);
+
+  // Copy compiled expression without recompilation.
+  epExpression *expr_copy = epExpression__duplicate(expr_original);
+
+  // Check for errors.
+  if (expr_original) {
+
+    // Assign new variable to copy.
+    epExpression__replace_real_variable(expr_copy, &old, &new);
+
+    // Get results from evaluation.
+    double result_original = epExpression__eval_real(expr_original);
+    double result_copy = epExpression__eval_real(expr_copy);
+
+    // Print results.
+    printf("Original: %f\n", result_original);
+    printf("Copy: %f\n", result_copy);
+  }
+
+  // Delete expressions.
+  epExpression__delete(expr_original);
+  epExpression__delete(expr_copy);
+
+  return 0;
+}
+```
+
+This should return the following output:
+
+```
+Original: 16.756802
+Copy: 48.343013
+```
+
 ## Advices
 
 The parser handles a lot for you, but there are a few things that the parser is not concepted for. Here are some things to remember while using this parser.
-
-- **'epExpression__eval' functions are not thread-safe.** <br/> A compiled expression has reserved memory for the evaluation for the lifetime of that expression. This has the advantage that in large computational efforts the evaluation occurs without the persistent need to allocate or free memory allowing for faster evaluation, but this pre-reserved memory can only be used by one function call at the time. Therefore, multithreading will lead to interference during the several evaluations. The solution to this problem is to compile one expression string into multiple epExpressions and then give every thread one of these epExpressions to evaluate. The eval functions themselves won't cause problems but rather the epExpression pointer with its reserved memory. A thread-safe routine might be added in the near future. The compilation routine itself is thread-safe.
 
 - **Do not define variables in expression strings.** <br/> The term "parser" may lead to the assumption that one can define variables in a string passed to the parser. Something like this won't work in the intended way: <br/> `epExpression__compile("c = 2+3i", NULL, NULL);` <br/> Stick to the functions provided by the header file and implement variables in the same manner shown in the [example](#Complete-Example).
 
@@ -193,8 +265,6 @@ The parser handles a lot for you, but there are a few things that the parser is 
   + Error = 0: <br/> No errors occured during compilation.
   + Error = Value between 1 and length of expression string: <br/> A function or a variable is not recognized or the expression string is not balanced, meaning that not every opening brace has a well-placed closing brace.
   + Error = -1: <br/> An error occured during the synthesis of the reverse polish notation or the expression string started with a closing brace.
-
-- **Optimized, but not fully.** <br/> While this parser condenses constant sub-expressions and powers get checked for whole number exponents for an increase in the evaluation speed one can further optimize.
 
 - **Multi-argument functions are not supported.** <br/> This library supports only single argument functions, except for binary operators.
 
