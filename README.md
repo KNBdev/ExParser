@@ -167,6 +167,8 @@ Complex expression evaluates to: -0.002338 + 0.019904 * i
 
 The parser handles a lot for you, but there are a few things that the parser is not concepted for. Here are some things to remember while using this parser.
 
+- **'epExpression__eval' functions are not thread-safe.** <br/> A compiled expression has reserved memory for the evaluation for the lifetime of that expression. Therefore, multithreading will lead to interference during the several evaluations. The solution to this problem is to compile one expression string into multiple epExpressions and then give every thread one of these epExpressions to evaluate. The eval functions themselves won't cause problems but rather the epExpression pointer with its reserved memory. A thread-safe routine might be added in the near future. The compilation routine itself is thread-safe.
+
 - **Do not define variables in expression strings.** <br/> The term "parser" may lead to the assumption that one can define variables in a string passed to the parser. Something like this won't work in the intended way: <br/> `epExpression__compile("c = 2+3i", NULL, NULL);` <br/> Stick to the functions provided by the header file and implement variables in the same manner shown in the [example](#Complete-Example).
 
 - **Be careful when evaluating complex expressions or values with the 'epExpression__eval_real' function.** <br/> Every time, when you work with complex numbers and functions that are concepted for the use of real values, the imaginary part of the complex value will be discarded, possibly leading to false results. This in particular occurs with comparison operators that are only defined for real values, meaning that an expression like `"2+3i < 3+2i"` will be evaluated to true, because the real parts on every side lead to that result during comparison. Remember: The expression does not know whether it contains complex values, the library user has to keep an eye on what is passed to compile and what will be evaluated.
@@ -191,6 +193,10 @@ The parser handles a lot for you, but there are a few things that the parser is 
   + Error = 0: <br/> No errors occured during compilation.
   + Error = Value between 1 and length of expression string: <br/> A function or a variable is not recognized or the expression string is not balanced, meaning that not every opening brace has a well-placed closing brace.
   + Error = -1: <br/> An error occured during the synthesis of the reverse polish notation or the expression string started with a closing brace.
+
+- **Optimized, but not fully.** <br/> While this parser condenses constant sub-expressions and powers get checked for whole number exponents for an increase in the evaluation speed one can further optimize.
+
+- **Multi-argument functions are not supported.** <br/> This library supports only single argument functions, except for binary operators.
 
 ## Extra: Short explenation of the project components
 
