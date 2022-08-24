@@ -94,8 +94,6 @@ $ gcc … -I<path-to-directory-containing-exparser.h> <path-to>/libexparser.a -l
 
 ## Complete example
 
-The following example contains all above mentioned functions.
-
 ```c
 #include <complex.h>
 #include <stdio.h>
