@@ -13,7 +13,7 @@ epStack__push_complex (
 ) {
 
   epStack__push(stack);
-  epValue__set_complex(stack->head->value, c);
+  epStack__init_head_value(stack);
 
-  stack->head->type = VALUE;
+  epValue__set_complex(stack->head->content.value, c);
 }

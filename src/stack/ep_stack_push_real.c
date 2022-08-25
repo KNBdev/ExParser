@@ -11,7 +11,7 @@ epStack__push_real (
 ) {
 
   epStack__push(stack);
-  epValue__set_real(stack->head->value, r);
+  epStack__init_head_value(stack);
 
-  stack->head->type = VALUE;
+  epValue__set_real(stack->head->content.value, r);
 }

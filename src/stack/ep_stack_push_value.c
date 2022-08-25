@@ -13,5 +13,5 @@ epStack__push_value (
   epStack__push(stack);
 
   stack->head->type = VALUE;
-  stack->head->value = value;
+  stack->head->content.value = value;
 }

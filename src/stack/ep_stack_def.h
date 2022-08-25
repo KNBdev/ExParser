@@ -38,6 +38,7 @@ typedef enum eElement {
 typedef union uElement {
 
   char brace;
+  epValue *value;
   epFunctionListElement const *function;
 
 } uElement;
@@ -50,8 +51,6 @@ struct epStackElement {
 
   eElement type;
   uElement content;
-
-  epValue *value;
 
 };
 

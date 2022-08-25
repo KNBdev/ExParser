@@ -14,6 +14,4 @@ epStack__push (
 
   element->prev = stack->head;
   stack->head = element;
-
-  stack->head->value = epValue__create();
 }

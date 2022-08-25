@@ -88,6 +88,11 @@ epStack__reverse (
   epStack *stack
 );
 
+void
+epStack__init_head_value (
+  epStack *stack
+);
+
 //-----------------------------------------------------------------------------
 
 bool
