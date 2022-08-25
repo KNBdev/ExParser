@@ -1,2 +1,4 @@
 build
-tests/exparser_tests
+examples
+!examples/*.c
+!examples/Makefile
