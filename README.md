@@ -94,6 +94,14 @@ $ gcc … -I<path-to-directory-containing-exparser.h> <path-to>/libexparser.a -l
 
 ## Complete example
 
+All provided examples are located at `./examples/`. To compile them, simply go to that directory and compile the source files via
+
+```
+$ make
+```
+
+or follow the [compilation](#Compilation) steps for every example source file.
+
 ```c
 #include <complex.h>
 #include <stdio.h>
@@ -108,9 +116,17 @@ int main (void) {
   const char *string_r = "cosh(r^-3) - sin(5/r)";
   const char *string_c = "exp(i/c)^r / sin(3+4i)";
 
+  // Print expressions.
+  printf("Real expression   : %s\n", string_r);
+  printf("Complex expression: %s\n\n", string_c);
+
   // Create variables.
   double r = 5;
   double complex c = 3 - 7 * I;
+
+  // Print varaiables.
+  printf("Real variable   : %f\n", r);
+  printf("Complex variable: %f + %f * i\n\n", creal(c), cimag(c));
 
   // Set up variable container.
   epVariables *vars = epVariables__create();
@@ -128,19 +144,18 @@ int main (void) {
   epExpression *expression_r = epExpression__compile(string_r, &error, vars);
   epExpression *expression_c = epExpression__compile(string_c, NULL, vars);
 
+  // After compilation, there is no further use for the variable container.
+  epVariables__delete(vars);
+
   // Check if expressions have been compiled successfully.
   if (!expression_r || !expression_c) {
 
-    printf("Error occured during compilation! Abort execution!\n");
-    epVariables__delete(vars);
+    printf("Error occured during compilation!\n");
     epExpression__delete(expression_r);
     epExpression__delete(expression_c);
 
     return 1;
   }
-
-  // After compilation, there is no further use for the variable container.
-  epVariables__delete(vars);
 
   // Evaluate complex expression.
   double result_r = epExpression__eval_real(expression_r);
@@ -151,8 +166,12 @@ int main (void) {
   epExpression__delete(expression_c);
 
   // Print results.
-  printf("Real expression evaluates to: %f\n", result_r);
-  printf("Complex expression evaluates to: %f + %f * i\n", creal(result_c), cimag(result_c));
+  printf("Real expression evaluates to   : %f\n", result_r);
+  printf(
+    "Complex expression evaluates to: %f + %f * i\n",
+    creal(result_c),
+    cimag(result_c)
+  );
 
   return 0;
 }
@@ -161,7 +180,7 @@ int main (void) {
 Compile this with the instructions given at the entry [Compilation](#Compilation). Executing this code should result in the following output:
 
 ```
-Real expression evaluates to: 0.158561
+Real expression evaluates to   : 0.158561
 Complex expression evaluates to: -0.002338 + 0.019904 * i
 ```
 
@@ -188,9 +207,16 @@ int main (void) {
   // Expression to evaluate.
   const char *expression = "x^2 - sin(x)";
 
+  // Print expression.
+  printf("%s\n", expression);
+
   // Real variables to use during evaluation.
   double old = 4;
   double new = 7;
+
+  // Print variables.
+  printf("Old value: %f\n", old);
+  printf("New value: %f\n", new);
 
   // Variables container.
   epVariables *vars = epVariables__create();
@@ -216,8 +242,8 @@ int main (void) {
     double result_copy = epExpression__eval_real(expr_copy);
 
     // Print results.
-    printf("Original: %f\n", result_original);
-    printf("Copy: %f\n", result_copy);
+    printf("Result for old value: %f\n", result_original);
+    printf("Result for new value: %f\n", result_copy);
   }
 
   // Delete expressions.
@@ -231,8 +257,11 @@ int main (void) {
 This should return the following output:
 
 ```
-Original: 16.756802
-Copy: 48.343013
+x^2 - sin(x)
+Old value: 4.000000
+New value: 7.000000
+Result for old value: 16.756802
+Result for new value: 48.343013
 ```
 
 ## Advices
