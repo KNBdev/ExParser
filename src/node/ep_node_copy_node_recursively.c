@@ -20,9 +20,9 @@ epNode__copy_node_recursively (
   epNode *new = epNode__create();
 
   new->type = node->type;
-  new->value = epValue__create();
   new->function = node->function;
 
+  new->value = epValue__create();
   epValue__copy(new->value, node->value);
 
   epNode__assign_left(new, epNode__copy_node_recursively(node->left));
