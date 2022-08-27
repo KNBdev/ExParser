@@ -510,7 +510,9 @@ rpn_stack_to_node (
           epNode__delete(nodeList[i]);
         }
 
+        *error = -1;
         free(nodeList);
+
         return NULL;
       }
 
