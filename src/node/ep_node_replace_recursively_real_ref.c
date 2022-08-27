@@ -11,7 +11,7 @@ epNode__replace_recursively_real_ref (
   double *r_new
 ) {
 
-  if (!node) {
+  if (!node || !r_old || !r_new) {
     return;
   }
 

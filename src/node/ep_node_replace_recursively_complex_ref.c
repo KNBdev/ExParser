@@ -13,7 +13,7 @@ epNode__replace_recursively_complex_ref (
   double complex *c_new
 ) {
 
-  if (!node) {
+  if (!node || !c_old || !c_new) {
     return;
   }
 
