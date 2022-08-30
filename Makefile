@@ -27,7 +27,7 @@ INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_DIRS += $(SRC_INCL)
 INC_FLAGS := $(addprefix -I, $(INC_DIRS))
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=iso9899:1999
 
 #------------------------------------------------------------------------------
 # Library extensions.

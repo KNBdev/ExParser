@@ -206,7 +206,7 @@ ep_functions__is_unary_invert (
 
 bool
 ep_functions__has_right_to_left_precedence (
-  const epFunctionListElement const *function
+  const epFunctionListElement * const function
 );
 
 //-----------------------------------------------------------------------------
