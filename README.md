@@ -67,7 +67,7 @@ ExParser provides a simple method to assign real and complex variables to your e
 
 This library provides an expression structure to operate on. The following functions are declared in the header:
 
-- `epExpression* epExpression__compile (const char *expr, unsigned int *error, epVariables *vars);` <br/> Compile an expression string into an expression struct.
+- `epExpression* epExpression__compile (const char *expr, int *error, epVariables *vars);` <br/> Compile an expression string into an expression struct.
 - `epExpression* epExpression__duplicate (epExpression *expr);` <br/> Duplicate an existing compiled expression into a standalone copy that has its own reserved memory.
 - `void epExpression__replace_real_variable (epExpression *expr, double *r_old, double *r_new);` <br/> Replace a real variable in an already compiled expression.
 - `void epExpression__replace_complex_variable (epExpression *expr, double complex *c_old, double complex *c_new);` <br/> Replace a complex variable in an already compiled expression.
@@ -138,7 +138,7 @@ int main (void) {
   epVariables__add_complex(vars, "c", &c);
 
   // Set up an integer variable that holds the compilation error code.
-  unsigned int error;
+  int error;
 
   // Compile the expressions, use error code and variable container.
   epExpression *expression_r = epExpression__compile(string_r, &error, vars);

@@ -33,7 +33,7 @@ int main (void) {
   epVariables__add_complex(vars, "c", &c);
 
   // Set up an integer variable that holds the compilation error code.
-  unsigned int error;
+  int error;
 
   // Compile the expressions, use error code and variable container.
   epExpression *expression_r = epExpression__compile(string_r, &error, vars);
