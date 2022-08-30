@@ -11,7 +11,7 @@ epNode__create (
   void
 ) {
 
-  epNode *node = malloc(sizeof(epNode));
+  epNode *node = (epNode *) malloc(sizeof(epNode));
 
   node->left = NULL;
   node->right = NULL;

@@ -10,7 +10,7 @@ epValue__create (
   void
 ) {
 
-  epValue *value = malloc(sizeof(epValue));
+  epValue *value = (epValue *) malloc(sizeof(epValue));
   epValue__set_real(value, 0);
 
   return value;

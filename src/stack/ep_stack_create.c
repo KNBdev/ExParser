@@ -11,7 +11,7 @@ epStack__create (
   void
 ) {
 
-  epStack* stack = malloc(sizeof(epStack));
+  epStack* stack = (epStack *) malloc(sizeof(epStack));
   stack->head = NULL;
 
   return stack;
