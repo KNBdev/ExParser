@@ -129,21 +129,21 @@ typedef struct epFunctionListElement {
 
 static const epFunctionListElement epFunctionList[] = {
 
-  {"<", ep_functions_lt, RR, TWO, Q},
-  {">", ep_functions_gt, RR, TWO, Q},
+  {"<",  ep_functions_lt,  RR, TWO, Q},
+  {">",  ep_functions_gt,  RR, TWO, Q},
   {"<=", ep_functions_leq, RR, TWO, Q},
   {"=<", ep_functions_leq, RR, TWO, Q},
   {">=", ep_functions_geq, RR, TWO, Q},
   {"=>", ep_functions_geq, RR, TWO, Q},
 
-  {"==", ep_functions_eq, CR, TWO, EQ},
+  {"==", ep_functions_eq,  CR, TWO, EQ},
   {"!=", ep_functions_neq, CR, TWO, EQ},
   {"=!", ep_functions_neq, CR, TWO, EQ},
 
   {"&", ep_functions_and, CR, TWO, MULTIPLICATIVE},
-  {"|", ep_functions_or, CR, TWO, ADDITIVE},
+  {"|", ep_functions_or,  CR, TWO, ADDITIVE},
 
-  {"%", ep_functions_mod, RR, TWO, MULTIPLICATIVE},
+  {"%",  ep_functions_mod,     RR, TWO, MULTIPLICATIVE},
   {"%-", ep_functions_mod_inv, RR, TWO, MULTIPLICATIVE},
 
   {"+", ep_functions_cadd, CC, TWO, ADDITIVE},
@@ -156,19 +156,19 @@ static const epFunctionListElement epFunctionList[] = {
   {"/-", ep_functions_cdiv_inv, CC, TWO, MULTIPLICATIVE},
   {"^-", ep_functions_cpow_inv, CC, TWO, POWER},
 
-  {"e", ep_functions_scientific, RR, TWO, F},
-  {"e+", ep_functions_scientific, RR, TWO, F},
+  {"e",  ep_functions_scientific,     RR, TWO, F},
+  {"e+", ep_functions_scientific,     RR, TWO, F},
   {"e-", ep_functions_scientific_inv, RR, TWO, F},
 
-  {"abs", cabs, CR, ONE, F},
-  {"exp", cexp, CC, ONE, F},
-  {"log", clog, CC, ONE, F},
+  {"abs",  cabs,  CR, ONE, F},
+  {"exp",  cexp,  CC, ONE, F},
+  {"log",  clog,  CC, ONE, F},
   {"sqrt", csqrt, CC, ONE, F},
 
   {"real", creal, CR, ONE, F},
   {"imag", cimag, CR, ONE, F},
-  {"arg", carg, CR, ONE, F},
-  {"conj", conj, CC, ONE, F},
+  {"arg",  carg,  CR, ONE, F},
+  {"conj", conj,  CC, ONE, F},
 
   {"acos", cacos, CC, ONE, F},
   {"asin", casin, CC, ONE, F},
