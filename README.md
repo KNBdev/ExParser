@@ -18,6 +18,7 @@ The theory behind this parser relies on the application of the [shunting yard al
 - Further supports:
   + Scientific notation: `1e10`, `2e-5`, …
   + Unary invert: `-3 + …`, `(-5 + 9i)`, `4 *- 2`, `7 /- sin(8i)`, …
+  + Brace-less evaluation of functions: `sin cosh 5` or `sin(cosh(5))`
 - Thread safety can be achieved, read [thread safety](#Thread-safety)
 
 ## Building
