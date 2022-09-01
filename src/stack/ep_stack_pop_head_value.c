@@ -9,7 +9,9 @@ epStack__pop_head_value (
   epStack *stack
 ) {
 
-  epValue *value = stack->head->content.value;
+  epValue *value = epValue__create();
+  epValue__copy(value, stack->head->content.value);
+
   epStack__pop(stack);
 
   return value;

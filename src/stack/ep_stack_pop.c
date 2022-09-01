@@ -11,6 +11,10 @@ epStack__pop (
   epStack *stack
 ) {
 
+  if (epStack__is_head_value(stack)) {
+    epValue__delete(stack->head->content.value);
+  }
+
   epStackElement *element = stack->head;
   stack->head = element->prev;
 
