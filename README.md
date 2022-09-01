@@ -37,7 +37,7 @@ Follow the steps in exactly this or a similar manner, starting at the root direc
 2. Enter build directory. <br/> `$ cd build/`
 3. Copy all header files and source files into the build directory. <br/> `$ cp -r ../include/*.h ../src/*/*.h ../src/*/*.c .`
 4. Compile all source files without linking. <br/> `$ gcc -c *.c`
-5. Create a static library archive. <br/> `$ ar rcs libexparser.a *.o`
+5. Create a static library archive. <br/> `$ ar rcs libexparser.a *.o` <br/> Or a shared library. <br/> `$ gcc -shared -o libexparser.so *.o -lm`
 
 ## Usage
 
@@ -74,7 +74,7 @@ This library provides an expression structure to operate on. The following funct
 
 ### Compilation
 
-To compile your project with ExParser, simply link the static library alongside with the math library. Don't forget to tell the compiler where to find everything.
+To compile your project with ExParser, simply link the static or shared library alongside with the math library. Don't forget to tell the compiler where to find everything.
 
 ```
 $ gcc … \
