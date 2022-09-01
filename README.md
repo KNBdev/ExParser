@@ -15,10 +15,6 @@ The theory behind this parser relies on the application of the [shunting yard al
 - Evaluation routine is optimized for speed
 - Compiling routine condenses constant parts of the expression
 - Powers with whole number exponents are optimized in evaluation
-- Further supports:
-  + Scientific notation: `1e10`, `2e-5`, …
-  + Unary invert: `-3 + …`, `(-5 + 9i)`, `4 *- 2`, `7 /- sin(8i)`, …
-  + Brace-less evaluation of functions: `sin cosh 5` or `sin(cosh(5))`
 - Thread safety can be achieved, read [thread safety](#Thread-safety)
 
 ## Building
@@ -285,7 +281,7 @@ The parser handles a lot for you, but there are a few things that the parser is 
 
 - **Imaginary values get evaluated as such.** <br/> If an expression contains an imaginary value, an evaluation of such one would occur as follows: `5i = (5 * i)`, not as in `5i = 5 * i`. The difference stands out when operators with a higher precedence level act on these values: `(5 * i)^2 != 5 * i^2`. But pay attention! This only occurs on values directly followed by the imaginary unit, so: `3+4i^2 == 3 + (4i)^2` and `3+4i^2 != (3+4i)^2`.
 
-- **Unary inverts (a.k.a. minus signs).** <br/> Even though some unary invert occurances are syntactically incorrect, this library supports some, such as a leading minus sign or a multiplicative operator followed directly by a minus.
+- **Unary inverts (a.k.a. minus signs).** <br/> All multiplicative binary operators and powers support a leading unary invert symbol for the second argument (`3 *- 5`, `2 ^ -7`), in other cases or when errors are raised, use braces.
 
 - **Scientific notation is supported.** <br/> Only for real values and only with a leading and upcoming real value like `1e+5`, `-3e4`, `7e-5` but not `e+2`, `ie-7` nor `3e`.
 
