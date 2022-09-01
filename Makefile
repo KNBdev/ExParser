@@ -6,8 +6,8 @@
 
 TARGET_LIB ?= libexparser
 
-LIB_DIR ?= ./lib
 BUILD_DIR ?= ./build
+LIB_DIR ?= ./lib
 
 SRC_INCL ?= ./include
 
@@ -34,19 +34,26 @@ CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=iso9899:1999
 
 ifeq ($(OS), Windows_NT)
 	STLEXT := lib
+	SHLEXT := dll
 else
 	STLEXT := a
+	SHLEXT := so
 endif
 
 #------------------------------------------------------------------------------
 # Main targets.
 
 all: \
-  $(BUILD_DIR)/$(LIB_DIR)/$(TARGET_LIB).$(STLEXT)
+  $(BUILD_DIR)/$(LIB_DIR)/$(TARGET_LIB).$(STLEXT) \
+  $(BUILD_DIR)/$(LIB_DIR)/$(TARGET_LIB).$(SHLEXT)
 
 $(BUILD_DIR)/$(LIB_DIR)/$(TARGET_LIB).$(STLEXT): $(OBJS)
 	$(MKDIR_P) $(dir $@)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
+
+$(BUILD_DIR)/$(LIB_DIR)/$(TARGET_LIB).$(SHLEXT): $(OBJS)
+	$(MKDIR_P) $(dir $@)
+	$(CC) -shared -o $@ $(OBJS) $(LDFLAGS)
 
 #------------------------------------------------------------------------------
 # Implicit rules.
