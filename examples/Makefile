@@ -1,5 +1,5 @@
 CFLAGS += -I../include/
-LDFLAGS += -L../build/lib/ -lexparser -lm
+LDFLAGS += -L../build/lib/ -l:libexparser.a -lm
 
 all: \
   exparser_tests \
