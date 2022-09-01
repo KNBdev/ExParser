@@ -160,14 +160,14 @@ static const epFunctionListElement epFunctionList[] = {
   {"e+", ep_functions_scientific,     RR, TWO, F},
   {"e-", ep_functions_scientific_inv, RR, TWO, F},
 
-  {"abs",  cabs,  CR, ONE, F},
-  {"exp",  cexp,  CC, ONE, F},
-  {"log",  clog,  CC, ONE, F},
-  {"sqrt", csqrt, CC, ONE, F},
-
   {"real", creal, CR, ONE, F},
   {"imag", cimag, CR, ONE, F},
   {"arg",  carg,  CR, ONE, F},
+  {"abs",  cabs,  CR, ONE, F},
+
+  {"exp",  cexp,  CC, ONE, F},
+  {"log",  clog,  CC, ONE, F},
+  {"sqrt", csqrt, CC, ONE, F},
   {"conj", conj,  CC, ONE, F},
 
   {"acos", cacos, CC, ONE, F},
