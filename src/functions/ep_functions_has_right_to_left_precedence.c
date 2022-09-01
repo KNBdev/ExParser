@@ -12,6 +12,7 @@ ep_functions__has_right_to_left_precedence (
   switch (function->prec) {
 
     case POWER:
+    case F:
       return true;
 
     default:

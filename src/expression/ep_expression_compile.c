@@ -215,6 +215,7 @@ string_to_stack (
             ep_analysis__is_variable_char(vars, c)
           )
         ) {
+
           prevChar(s);
           break;
         }
@@ -237,6 +238,20 @@ string_to_stack (
         if (ep_functions__exists(buffer)) {
 
           epStack__push_function_by_name(stack, buffer);
+
+          epFunctionListElement const *cur = epStack__pop_head_function(stack);
+
+          if (!epStack__is_empty(stack)) {
+            if (epStack__is_head_function(stack)) {
+
+              if (cur->argc == TWO) {
+                buffersize = 1;
+                break;
+              }
+            }
+          }
+
+          epStack__push_function_by_ref(stack, cur);
 
           if (ep_functions__is_unary_invert(buffer)) {
 
@@ -288,9 +303,7 @@ string_to_stack (
       free(buffer);
 
       if (buffersize == 1) {
-
-        epStack__delete(stack);
-        return NULL;
+        break;
       }
 
     //-------------------------------------------------------------------------
@@ -303,14 +316,18 @@ string_to_stack (
     // Closing brace.
     } else if (ep_analysis__is_closing_brace(currChar(s))) {
 
+      if (!epStack__is_empty(stack)) {
+        if (epStack__is_head_function(stack)) {
+          break;
+        }
+      }
+
       epStack__push_brace_closed(stack, currChar(s));
 
     //-------------------------------------------------------------------------
     // No fit.
     } else {
-
-      epStack__delete(stack);
-      return NULL;
+      break;
     }
 
     nextChar(s);
@@ -372,7 +389,7 @@ stack_to_rpn_stack (
               ep_functions__has_right_to_left_precedence(fs)
             ) {
 
-              epStack__push_function_by_ref(temp, fs);
+              epStack__push_function_by_ref(temp, ft);
               break;
 
             } else {
@@ -477,9 +494,12 @@ rpn_stack_to_node (
 
       nodeList[nodeCount - 1] = epNode__create();
 
-      value = epStack__pop_head_value(rpn);
-      epNode__copy_value(nodeList[nodeCount - 1], value);
-      epValue__delete(value);
+      epValue *value = epStack__pop_head_value(rpn);
+
+      epNode__copy_value(
+        nodeList[nodeCount - 1],
+        value
+      );
 
     } else if (epStack__is_head_function(rpn)) {
 
@@ -504,16 +524,8 @@ rpn_stack_to_node (
 
       } else {
 
-        epStack__delete(rpn);
-
-        for (unsigned int i = 0; i < nodeCount; i++) {
-          epNode__delete(nodeList[i]);
-        }
-
         *error = -1;
-        free(nodeList);
-
-        return NULL;
+        break;
       }
 
       nodeList[nodeCount - 1] = current;
@@ -522,7 +534,7 @@ rpn_stack_to_node (
 
   epStack__delete(rpn);
 
-  if (nodeCount != 1) {
+  if (nodeCount != 1 || *error == -1) {
 
     for (unsigned int i = 0; i < nodeCount; i++) {
       epNode__delete(nodeList[i]);
