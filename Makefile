@@ -60,7 +60,7 @@ $(BUILD_DIR)/$(LIB_DIR)/$(TARGET_LIB).$(SHLEXT): $(OBJS)
 
 $(BUILD_DIR)/%.c.o: %.c
 	$(MKDIR_P) $(dir $@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(SRC_INCL_FLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(SRC_INCL_FLAGS) -c $< -o $@ -fPIC
 
 #------------------------------------------------------------------------------
 # Cleaning rules.
