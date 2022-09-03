@@ -36,7 +36,7 @@ Follow the steps in exactly this or a similar manner, starting at the root direc
 1. Make build directory. <br/> `$ mkdir build`
 2. Enter build directory. <br/> `$ cd build/`
 3. Copy all header files and source files into the build directory. <br/> `$ cp -r ../include/*.h ../src/*/*.h ../src/*/*.c .`
-4. Compile all source files without linking. <br/> `$ gcc -c *.c`
+4. Compile all source files without linking. <br/> `$ gcc -c *.c -fPIC`
 5. Create a static library archive. <br/> `$ ar rcs libexparser.a *.o` <br/> Or a shared library. <br/> `$ gcc -shared -o libexparser.so *.o -lm`
 
 ## Usage
