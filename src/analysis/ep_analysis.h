@@ -19,6 +19,7 @@ bool ep_analysis__is_imag_unit (char);
 bool ep_analysis__is_opening_brace (char);
 bool ep_analysis__is_closing_brace (char);
 
+char ep_analysis__get_invert (void);
 bool ep_analysis__is_invert (char);
 
 bool ep_analysis__is_function_char (char);

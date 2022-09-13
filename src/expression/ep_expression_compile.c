@@ -165,6 +165,29 @@ string_to_stack (
       )
     ) {
 
+      if (ep_analysis__is_invert(currChar(s))) {
+        if (!epStack__is_empty(stack)) {
+          if (
+            epStack__is_head_value(stack)
+            ||
+            epStack__is_head_brace_closed(stack)
+          ) {
+
+            char *_inv = malloc(sizeof(char) * 2);
+
+            _inv[0] = ep_analysis__get_invert();
+            _inv[1] = 0;
+
+            epStack__push_function_by_name(stack, _inv);
+
+            free(_inv);
+
+            nextChar(s);
+            continue;
+          }
+        }
+      }
+
       unsigned int string_len = 2;
       char *string = (char *) malloc(sizeof(char) * string_len);
       string[0] = currChar(s);
