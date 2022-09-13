@@ -19,6 +19,8 @@ bool ep_analysis__is_imag_unit (char);
 bool ep_analysis__is_opening_brace (char);
 bool ep_analysis__is_closing_brace (char);
 
+bool ep_analysis__is_invert (char);
+
 bool ep_analysis__is_function_char (char);
 bool ep_analysis__is_variable_char (epVariables* var, char c);
 

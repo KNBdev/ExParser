@@ -30,6 +30,7 @@ typedef struct epString {
 static void nextChar (epString *s);
 static void prevChar (epString *s);
 static char currChar (epString *s);
+static char pcurChar (epString *s);
 
 static epStack* string_to_stack (epString *s, epVariables *vars);
 static epStack* stack_to_rpn_stack (epStack *stack, int *error);
@@ -130,6 +131,16 @@ currChar (
   return s->chars[*s->pos];
 }
 
+//-------------------------------------
+
+static char
+pcurChar (
+  epString *s
+) {
+
+  return s->chars[(*s->pos) + 1];
+}
+
 //-----------------------------------------------------------------------------
 
 static epStack*
@@ -144,7 +155,15 @@ string_to_stack (
 
     //-------------------------------------------------------------------------
     // Numeric (real and imag).
-    if (ep_analysis__is_numeric(currChar(s))) {
+    if (
+      ep_analysis__is_numeric(currChar(s))
+      ||
+      (
+        ep_analysis__is_invert(currChar(s))
+        &&
+        ep_analysis__is_numeric(pcurChar(s))
+      )
+    ) {
 
       unsigned int string_len = 2;
       char *string = (char *) malloc(sizeof(char) * string_len);
@@ -186,7 +205,7 @@ string_to_stack (
     } else if (
       ep_analysis__is_imag_unit(currChar(s))
       &&
-      !isalpha(s->chars[(*s->pos) + 1])
+      !isalpha(pcurChar(s))
     ) {
 
       epStack__push_complex(stack, I);
