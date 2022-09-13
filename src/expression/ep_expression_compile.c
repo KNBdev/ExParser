@@ -272,7 +272,7 @@ string_to_stack (
 
           epStack__push_function_by_ref(stack, cur);
 
-          if (ep_functions__is_unary_invert(buffer)) {
+          if (buffersize == 2 && ep_analysis__is_invert(buffer[0])) {
 
             epFunctionListElement const *inv = epStack__pop_head_function(
               stack

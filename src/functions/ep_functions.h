@@ -200,11 +200,6 @@ ep_functions__exists (
 );
 
 bool
-ep_functions__is_unary_invert (
-  const char *name
-);
-
-bool
 ep_functions__has_right_to_left_precedence (
   const epFunctionListElement * const function
 );
