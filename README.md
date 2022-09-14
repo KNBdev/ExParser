@@ -19,17 +19,20 @@ The theory behind this parser relies on the application of the [shunting yard al
 
 ## Building
 
-### With Make
+### With CMake
 
 Go to the root directory, open a terminal and compile the source with:
 
 ```
+$ mkdir build
+$ cd build
+$ cmake ..
 $ make
 ```
 
-The library will then be located at `./build/lib/`.
+The library will then be located at the build directory.
 
-### Without Make
+### Without CMake
 
 Follow the steps in exactly this or a similar manner, starting at the root directory:
 
@@ -37,13 +40,13 @@ Follow the steps in exactly this or a similar manner, starting at the root direc
 2. Enter build directory. <br/> `$ cd build/`
 3. Copy all header files and source files into the build directory. <br/> `$ cp -r ../include/*.h ../src/*/*.h ../src/*/*.c .`
 4. Compile all source files without linking. <br/> `$ gcc -c *.c -fPIC`
-5. Create a static library archive. <br/> `$ ar rcs libexparser.a *.o` <br/> Or a shared library. <br/> `$ gcc -shared -o libexparser.so *.o -lm`
+5. Create a static library archive. <br/> `$ ar rcs libexparser_s.a *.o` <br/> Or a shared library. <br/> `$ gcc -shared -o libexparser.so *.o -lm`
 
 ## Usage
 
 ### Include flags
 
-To use the library, simply include the ExParser header into your project.
+To use the library, simply include the ExParser header from the `include` directory into your project.
 
 ```c
 #include "exparser.h"
@@ -91,13 +94,7 @@ $ gcc … -I<path-to-directory-containing-exparser.h> <path-to>/libexparser.a -l
 
 ## Complete example
 
-All provided examples are located at `./examples/`. To compile them, simply go to that directory and compile the source files via
-
-```
-$ make
-```
-
-or follow the [compilation](#Compilation) steps for every example source file.
+All provided examples are located at `examples`.
 
 ```c
 #include <complex.h>
@@ -174,7 +171,7 @@ int main (void) {
 }
 ```
 
-Compile this with the instructions given at the entry [Compilation](#Compilation). Executing this code should result in the following output:
+Compile this with the instructions given at [compilation](#Compilation). Executing this code should result in the following output:
 
 ```
 Real expression evaluates to   : 0.158561
@@ -277,11 +274,11 @@ The parser handles a lot for you, but there are a few things that the parser is 
 
 - **Variables can be overwritten.** <br/> If a variable name already exists in the container, the address gets overwritten.
 
-- **Powers are evaluated from right to left.** <br/> While the evaluation order of every other function or operator follows their precedence level and a left-to-right handling, powers are evaluated as follows: `4^3^2 = 4^(3^2)`. Keep that in mind or use braces to achieve a left-to-right evaluation order for powers.
+- **Powers and functions are evaluated from right to left.** <br/> While the evaluation order of every other operator follows their precedence level and a left-to-right handling, powers and functions are evaluated as follows: `4^3^2 = 4^(3^2)` and `log cosh -1.5 = log(cosh(-1.5))`. Keep that in mind or use braces to achieve a left-to-right evaluation order for powers.
 
 - **Imaginary values get evaluated as such.** <br/> If an expression contains an imaginary value, an evaluation of such one would occur as follows: `5i = (5 * i)`, not as in `5i = 5 * i`. The difference stands out when operators with a higher precedence level act on these values: `(5 * i)^2 != 5 * i^2`. But pay attention! This only occurs on values directly followed by the imaginary unit, so: `3+4i^2 == 3 + (4i)^2` and `3+4i^2 != (3+4i)^2`.
 
-- **Unary inverts (a.k.a. minus signs).** <br/> All multiplicative binary operators and powers support a leading unary invert symbol for the second argument (`3 *- 5`, `2 ^ -7`), in other cases or when errors are raised, use braces.
+- **Unary inverts (a.k.a. minus signs).** <br/> All multiplicative binary operators and powers support a leading unary invert symbol for the second argument (`3 *- 5`, `2 ^ -7`), in other cases or if errors are raised, use braces.
 
 - **Scientific notation is supported.** <br/> Only for real values and only with a leading and upcoming real value like `1e+5`, `-3e4`, `7e-5` but not `e+2`, `ie-7` nor `3e`.
 
@@ -300,7 +297,7 @@ Following are some words about the separate components that this project consist
 
 * `./src/*/*.h`: <br/> These headers consist of functions meant to be used by the different project components.
 
-* `./src/*/*_def.h`: <br/> These header files consist of structure definitions, most of the time meant to be kept from the project maintainer or library user to avoid direct manipulation of these structs that could bypass a specific execution order of other functions considering that structure.
+* `./src/*/*_def.h`: <br/> These header files consist of structure definitions, most of the time meant to be kept from the library user to avoid direct manipulation of these structs that could bypass a specific execution order of other functions considering that structure.
 
 Now follows a short description of the different project parts.
 
