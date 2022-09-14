@@ -25,3 +25,6 @@ target_link_libraries(exparser_example_1 exparser_s m)
 
 add_executable(exparser_example_2 examples/exparser_example_2.c)
 target_link_libraries(exparser_example_2 exparser_s m)
+
+add_executable(exparser_shell examples/exparser_shell.c)
+target_link_libraries(exparser_shell exparser_s m)
