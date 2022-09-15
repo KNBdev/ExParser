@@ -2,20 +2,33 @@ cmake_minimum_required(VERSION 3.16)
 
 project(exparser)
 
-file(GLOB SOURCES "src/*/*.c")
+set(SOURCES "src/*/*.c")
+set(INCLUDE "include/exparser.h")
+list(APPEND INCLUDE_DIRS "include" "src/*/")
 
-file(GLOB INCLUDE_DIRS "src/*/")
-list(APPEND INCLUDE_DIRS "include")
+#------------------------------------------------------------------------------
+
+file(GLOB SOURCES ${SOURCES})
+
+file(GLOB INCLUDE_DIRS ${INCLUDE_DIRS})
 include_directories(${INCLUDE_DIRS})
 
 set(OBJLIB ${PROJECT_NAME}_o)
 add_library(${OBJLIB} OBJECT ${SOURCES})
 set_property(TARGET ${OBJLIB} PROPERTY POSITION_INDEPENDENT_CODE 1)
 
-add_library(${PROJECT_NAME}_s STATIC $<TARGET_OBJECTS:${OBJLIB}>)
-add_library(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:${OBJLIB}>)
+set(LIBRARYSHARED ${PROJECT_NAME})
+set(LIBRARYSTATIC ${PROJECT_NAME}_s)
 
-#
+add_library(${LIBRARYSTATIC} STATIC $<TARGET_OBJECTS:${OBJLIB}>)
+add_library(${LIBRARYSHARED} SHARED $<TARGET_OBJECTS:${OBJLIB}>)
+
+#------------------------------------------------------------------------------
+
+install(FILES ${INCLUDE} DESTINATION /usr/local/include/)
+install(TARGETS ${LIBRARYSHARED} ${LIBRARYSTATIC} DESTINATION /usr/local/lib/)
+
+#------------------------------------------------------------------------------
 
 add_executable(exparser_tests examples/exparser_tests.c)
 target_link_libraries(exparser_tests exparser_s m)
