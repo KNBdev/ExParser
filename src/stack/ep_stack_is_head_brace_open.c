@@ -7,7 +7,7 @@
 
 bool
 epStack__is_head_brace_open (
-  epStack *stack
+  const epStack *stack
 ) {
 
   return (stack->head->type == BRACEOPEN);

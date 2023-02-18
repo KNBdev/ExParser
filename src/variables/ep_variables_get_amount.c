@@ -7,7 +7,7 @@
 
 unsigned int
 epVariables__get_amount (
-  epVariables *vars
+  const epVariables *vars
 ) {
 
   return vars->amount;

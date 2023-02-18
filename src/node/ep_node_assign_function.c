@@ -12,37 +12,36 @@ epNode__assign_function (
   epFunctionListElement const *element
 ) {
 
-  epFunctionListElement const *f = element;
   epFunction *F = NULL;
 
   node->type = FUNCTION;
 
   F = &node->function;
-  F->type = f->type;
-  F->argc = f->argc;
+  F->type = element->type;
+  F->argc = element->argc;
 
   if (F->type == RR) {
 
     if (F->argc == ONE) {
-      F->function.rr._1 = f->pFunction;
+      F->function.rr._1 = element->pFunction;
     } else if (F->argc == TWO) {
-      F->function.rr._2 = f->pFunction;
+      F->function.rr._2 = element->pFunction;
     }
 
   } else if (F->type == CR) {
 
     if (F->argc == ONE) {
-      F->function.cr._1 = f->pFunction;
+      F->function.cr._1 = element->pFunction;
     } else if (F->argc == TWO) {
-      F->function.cr._2 = f->pFunction;
+      F->function.cr._2 = element->pFunction;
     }
 
   } else if (F->type == CC) {
 
     if (F->argc == ONE) {
-      F->function.cc._1 = f->pFunction;
+      F->function.cc._1 = element->pFunction;
     } else if (F->argc == TWO) {
-      F->function.cc._2 = f->pFunction;
+      F->function.cc._2 = element->pFunction;
     }
   }
 }

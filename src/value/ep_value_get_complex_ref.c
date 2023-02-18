@@ -7,7 +7,7 @@
 
 double complex*
 epValue__get_complex_ref (
-  epValue *value
+  const epValue *value
 ) {
 
   return value->value.cRef;

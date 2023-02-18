@@ -9,7 +9,7 @@
 
 epExpression*
 epExpression__duplicate (
-  epExpression *expr
+  const epExpression *expr
 ) {
 
   if (!expr) {

@@ -32,7 +32,7 @@ static void prevChar (epString *s);
 static char currChar (epString *s);
 static char ncurChar (epString *s);
 
-static epStack* string_to_stack (epString *s, epVariables *vars);
+static epStack* string_to_stack (epString *s, const epVariables *vars);
 static epStack* stack_to_rpn_stack (epStack *stack, int *error);
 static epNode* rpn_stack_to_node (epStack *rpn, int *error);
 
@@ -42,7 +42,7 @@ epExpression*
 epExpression__compile (
   const char *expression,
   int *error,
-  epVariables *vars
+  const epVariables *vars
 ) {
 
   if (!expression) {
@@ -146,7 +146,7 @@ ncurChar (
 static epStack*
 string_to_stack (
   epString *s,
-  epVariables *vars
+  const epVariables *vars
 ) {
 
   epStack *stack = epStack__create();

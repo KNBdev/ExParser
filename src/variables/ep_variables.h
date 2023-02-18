@@ -16,42 +16,42 @@ extern "C" {
 
 bool
 epVariables__exists (
-  epVariables *vars,
+  const epVariables *vars,
   const char *name
 );
 
 bool
 epVariables__is_real (
-  epVariables *vars,
+  const epVariables *vars,
   const char *name
 );
 
 bool
 epVariables__is_complex (
-  epVariables *vars,
+  const epVariables *vars,
   const char *name
 );
 
 double*
 epVariables__get_real (
-  epVariables *vars,
+  const epVariables *vars,
   const char *name
 );
 
 double complex*
 epVariables__get_complex (
-  epVariables *vars,
+  const epVariables *vars,
   const char *name
 );
 
 unsigned int
 epVariables__get_amount (
-  epVariables *vars
+  const epVariables *vars
 );
 
 const char*
 epVariables__get_name_by_index (
-  epVariables *vars,
+  const epVariables *vars,
   unsigned int index
 );
 

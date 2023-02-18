@@ -7,7 +7,7 @@
 
 double complex
 epValue__get_complex (
-  epValue *value
+  const epValue *value
 ) {
 
   if (epValue__is_real(value)) {

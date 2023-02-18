@@ -21,7 +21,7 @@ epExpression__create (
 void
 epExpression__assign_node (
   epExpression *expression,
-  epNode *node
+  epNode* const node
 );
 
 //-----------------------------------------------------------------------------

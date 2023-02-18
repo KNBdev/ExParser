@@ -23,7 +23,7 @@ char ep_analysis__get_invert (void);
 bool ep_analysis__is_invert (char);
 
 bool ep_analysis__is_function_char (char);
-bool ep_analysis__is_variable_char (epVariables* var, char c);
+bool ep_analysis__is_variable_char (const epVariables* vars, char c);
 
 bool ep_analysis__is_brace_pair (char, char);
 bool ep_analysis__is_string_balanced (const char *string, int *error);

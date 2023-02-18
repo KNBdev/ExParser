@@ -7,7 +7,7 @@
 
 bool
 epStack__is_head_function (
-  epStack *stack
+  const epStack *stack
 ) {
 
   return (stack->head->type == FUNCTION);

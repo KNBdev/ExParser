@@ -7,7 +7,7 @@
 
 bool
 epNode__contains_value (
-  epNode *node
+  const epNode *node
 ) {
 
   return (node->type == VALUE);

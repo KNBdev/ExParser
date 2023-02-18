@@ -6,7 +6,7 @@
 void
 epValue__copy (
   epValue *dest,
-  epValue *src
+  const epValue *src
 ) {
 
   *dest = *src;

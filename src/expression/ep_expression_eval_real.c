@@ -8,7 +8,7 @@
 
 double
 epExpression__eval_real (
-  epExpression *expression
+  const epExpression *expression
 ) {
 
   return epValue__get_real(epNode__eval(expression->node));

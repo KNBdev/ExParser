@@ -7,7 +7,7 @@
 
 bool
 epNode__contains_function (
-  epNode *node
+  const epNode *node
 ) {
 
   return (node->type == FUNCTION);

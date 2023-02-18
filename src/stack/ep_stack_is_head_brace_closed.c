@@ -7,7 +7,7 @@
 
 bool
 epStack__is_head_brace_closed (
-  epStack *stack
+  const epStack *stack
 ) {
 
   return (stack->head->type == BRACECLOSED);

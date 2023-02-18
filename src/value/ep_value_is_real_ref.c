@@ -7,7 +7,7 @@
 
 bool
 epValue__is_real_ref (
-  epValue *value
+  const epValue *value
 ) {
 
   return (value->type == RREF);

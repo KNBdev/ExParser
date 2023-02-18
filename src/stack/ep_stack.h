@@ -97,27 +97,27 @@ epStack__init_head_value (
 
 bool
 epStack__is_head_value (
-  epStack *stack
+  const epStack *stack
 );
 
 bool
 epStack__is_head_function (
-  epStack *stack
+  const epStack *stack
 );
 
 bool
 epStack__is_head_brace_open (
-  epStack *stack
+  const epStack *stack
 );
 
 bool
 epStack__is_head_brace_closed (
-  epStack *stack
+  const epStack *stack
 );
 
 bool
 epStack__is_empty (
-  epStack *stack
+  const epStack *stack
 );
 
 //-----------------------------------------------------------------------------

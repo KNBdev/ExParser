@@ -9,7 +9,7 @@ epStack__pop_head_function (
   epStack *stack
 ) {
 
-  epFunctionListElement const *function = stack->head->content.function;
+  const epFunctionListElement const *function = stack->head->content.function;
   epStack__pop(stack);
 
   return function;

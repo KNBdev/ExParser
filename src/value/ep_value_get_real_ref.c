@@ -5,7 +5,7 @@
 
 double*
 epValue__get_real_ref (
-  epValue *value
+  const epValue *value
 ) {
 
   return value->value.rRef;

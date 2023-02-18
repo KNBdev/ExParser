@@ -7,7 +7,7 @@
 
 double*
 epVariables__get_real (
-  epVariables *vars,
+  const epVariables *vars,
   const char *name
 ) {
 

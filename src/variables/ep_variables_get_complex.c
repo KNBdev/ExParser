@@ -8,7 +8,7 @@
 
 double complex*
 epVariables__get_complex (
-  epVariables *vars,
+  const epVariables *vars,
   const char *name
 ) {
 

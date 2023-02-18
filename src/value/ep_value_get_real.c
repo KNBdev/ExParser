@@ -7,7 +7,7 @@
 
 double
 epValue__get_real (
-  epValue *value
+  const epValue *value
 ) {
 
   if (epValue__is_real(value)) {

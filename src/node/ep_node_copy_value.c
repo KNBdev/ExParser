@@ -7,7 +7,7 @@
 void
 epNode__copy_value (
   epNode *node,
-  epValue *value
+  const epValue *value
 ) {
 
   if (!value) {

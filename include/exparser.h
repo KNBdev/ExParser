@@ -49,12 +49,12 @@ epExpression*
 epExpression__compile (
   const char *expr,
   int *error,
-  epVariables *vars
+  const epVariables *vars
 );
 
 epExpression*
 epExpression__duplicate (
-  epExpression *expr
+  const epExpression *expr
 );
 
 void
@@ -73,12 +73,12 @@ epExpression__replace_complex_variable (
 
 double
 epExpression__eval_real (
-  epExpression *expr
+  const epExpression *expr
 );
 
 double complex
 epExpression__eval_complex (
-  epExpression *expr
+  const epExpression *expr
 );
 
 void

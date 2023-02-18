@@ -7,7 +7,7 @@
 
 int
 epVariables__exists_at (
-  epVariables *vars,
+  const epVariables *vars,
   const char *name
 ) {
 

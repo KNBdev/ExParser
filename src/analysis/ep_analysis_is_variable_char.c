@@ -10,7 +10,7 @@
 
 bool
 ep_analysis__is_variable_char (
-  epVariables *vars,
+  const epVariables *vars,
   char c
 ) {
 

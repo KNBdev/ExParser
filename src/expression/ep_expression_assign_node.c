@@ -7,7 +7,7 @@
 void
 epExpression__assign_node (
   epExpression *expression,
-  epNode *node
+  epNode* const node
 ) {
 
   expression->node = node;

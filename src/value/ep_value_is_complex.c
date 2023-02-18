@@ -7,7 +7,7 @@
 
 bool
 epValue__is_complex (
-  epValue *value
+  const epValue *value
 ) {
 
   return (value->type == C);

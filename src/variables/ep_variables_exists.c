@@ -7,7 +7,7 @@
 
 bool
 epVariables__exists (
-  epVariables *vars,
+  const epVariables *vars,
   const char *name
 ) {
 

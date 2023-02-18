@@ -7,7 +7,7 @@
 
 bool
 epVariables__is_real (
-  epVariables *vars,
+  const epVariables *vars,
   const char *name
 ) {
 

@@ -10,7 +10,7 @@
 
 double complex
 epExpression__eval_complex (
-  epExpression *expression
+  const epExpression *expression
 ) {
 
   return epValue__get_complex(epNode__eval(expression->node));

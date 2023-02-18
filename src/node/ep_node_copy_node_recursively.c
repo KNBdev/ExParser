@@ -4,13 +4,11 @@
 #include "ep_node_def.h"
 #include "ep_value.h"
 
-#include <stdio.h>
-
 //-----------------------------------------------------------------------------
 
 epNode*
 epNode__copy_node_recursively (
-  epNode *node
+  const epNode *node
 ) {
 
   if (!node) {

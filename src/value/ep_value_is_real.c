@@ -7,7 +7,7 @@
 
 bool
 epValue__is_real (
-  epValue *value
+  const epValue *value
 ) {
 
   return (value->type == R);

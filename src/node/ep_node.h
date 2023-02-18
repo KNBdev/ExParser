@@ -34,18 +34,18 @@ epNode__delete (
 void
 epNode__assign_left (
   epNode *node,
-  epNode *left
+  epNode* const left
 );
 
 void
 epNode__assign_right (
   epNode *node,
-  epNode *right
+  epNode* const right
 );
 
 epValue*
 epNode__eval (
-  epNode *node
+  const epNode *node
 );
 
 void
@@ -81,12 +81,12 @@ epNode__assign_complex_ref (
 void
 epNode__copy_value (
   epNode *node,
-  epValue *value
+  const epValue *value
 );
 
 epNode*
 epNode__copy_node_recursively (
-  epNode *node
+  const epNode *node
 );
 
 void
@@ -115,12 +115,12 @@ epNode__reset_children (
 
 bool
 epNode__contains_function (
-  epNode *node
+  const epNode *node
 );
 
 bool
 epNode__contains_value (
-  epNode *node
+  const epNode *node
 );
 
 //-----------------------------------------------------------------------------

@@ -30,44 +30,44 @@ epValue__delete (
 
 bool
 epValue__is_real (
-  epValue *value
+  const epValue *value
 );
 
 bool
 epValue__is_real_ref (
-  epValue *value
+  const epValue *value
 );
 
 bool
 epValue__is_complex (
-  epValue *value
+  const epValue *value
 );
 
 bool
 epValue__is_complex_ref (
-  epValue *value
+  const epValue *value
 );
 
 //-----------------------
 
 double
 epValue__get_real (
-  epValue *value
+  const epValue *value
 );
 
 double*
 epValue__get_real_ref (
-  epValue *value
+  const epValue *value
 );
 
 double complex
 epValue__get_complex (
-  epValue *value
+  const epValue *value
 );
 
 double complex*
 epValue__get_complex_ref (
-  epValue *value
+  const epValue *value
 );
 
 //--------------------
@@ -101,7 +101,7 @@ epValue__set_complex_ref (
 void
 epValue__copy (
   epValue *dest,
-  epValue *src
+  const epValue *src
 );
 
 //-----------------------------------------------------------------------------

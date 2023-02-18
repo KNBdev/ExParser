@@ -7,7 +7,7 @@
 
 bool
 epStack__is_head_value (
-  epStack *stack
+  const epStack *stack
 ) {
 
   return (stack->head->type == VALUE);

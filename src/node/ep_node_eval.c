@@ -9,7 +9,7 @@
 
 epValue*
 epNode__eval (
-  epNode *node
+  const epNode *node
 ) {
 
   if (!node) {

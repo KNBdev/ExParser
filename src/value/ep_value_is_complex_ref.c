@@ -7,7 +7,7 @@
 
 bool
 epValue__is_complex_ref (
-  epValue *value
+  const epValue *value
 ) {
 
   return (value->type == CREF);

@@ -6,7 +6,7 @@
 void
 epNode__assign_left (
   epNode *node,
-  epNode *left
+  epNode* const left
 ) {
 
   node->left = left;

@@ -8,7 +8,7 @@
 
 bool
 epStack__is_empty (
-  epStack *stack
+  const epStack *stack
 ) {
 
   return (stack->head == NULL);
