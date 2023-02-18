@@ -128,6 +128,10 @@ currChar (
   epString *s
 ) {
 
+  if (*s->pos == 0 && isspace(s->chars[*s->pos])) {
+    nextChar(s);
+  }
+
   return s->chars[*s->pos];
 }
 
@@ -138,7 +142,11 @@ ncurChar (
   epString *s
 ) {
 
-  return s->chars[(*s->pos) + 1];
+  nextChar(s);
+  char next = currChar(s);
+  prevChar(s);
+
+  return next;
 }
 
 //-----------------------------------------------------------------------------
@@ -345,6 +353,7 @@ string_to_stack (
       free(buffer);
 
       if (buffersize == 1) {
+        *s->pos = string_len - 2;
         break;
       }
 
