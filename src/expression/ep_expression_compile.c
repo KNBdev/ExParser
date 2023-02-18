@@ -353,7 +353,6 @@ string_to_stack (
       free(buffer);
 
       if (buffersize == 1) {
-        *s->pos = string_len - 2;
         break;
       }
 
